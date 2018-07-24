@@ -1,6 +1,7 @@
 import React from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 
 const state = {
     isOpen: false
@@ -19,16 +20,20 @@ const mapStateToProps = state => {
 const NavBar = ({ username }) => (
     <Navbar color="light" light expand="md">
         {(username)?
-            <NavbarBrand href="/">{username}</NavbarBrand>:
-            <NavbarBrand href="/">DC2410 Coursework</NavbarBrand>}
+            <NavbarBrand tag={Link} to="/">Hello {username}!</NavbarBrand>:
+            <NavbarBrand tag={Link} to="/">DC2410 Coursework</NavbarBrand>
+        }
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
                 <NavItem>
-                    <NavLink href="/events">Events</NavLink>
+                    <NavLink tag={Link} to="/events">Events</NavLink>
                 </NavItem>
                 <NavItem>
-                    <NavLink href="/login">Login</NavLink>
+                    <NavLink tag={Link} to="/register">Register</NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} to="/login">Login</NavLink>
                 </NavItem>
             </Nav>
         </Collapse>

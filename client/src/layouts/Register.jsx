@@ -1,4 +1,4 @@
-import { login } from 'actions/userActions.js';
+import { register } from 'actions/userActions.js';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
@@ -17,16 +17,16 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.startLogin = this.startLogin.bind(this);
+        this.startRegister = this.startRegister.bind(this);
     }
 
-    startLogin(e) {
+    startRegister(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        var data = new FormData(document.forms.namedItem('loginForm'));
+        var data = new FormData(document.forms.namedItem('registerForm'));
         if (!this.props.authenticated) {
-            this.props.dispatch(login(data));
+            this.props.dispatch(register(data));
         }
     }
 
@@ -42,7 +42,7 @@ class Login extends React.Component {
         }
 
         if (authenticating === true) {
-            return <div>Logging in...</div>
+            return <div>Registering...</div>
         }
 
         return (
@@ -50,7 +50,7 @@ class Login extends React.Component {
                 <Button outline color="secondary" onClick={this.props.history.goBack}>Back</Button>
                 <Row>
                     <Col sm="4">
-                        <Form onSubmit={this.startLogin} id="loginForm">
+                        <Form onSubmit={this.startRegister} id="registerForm">
                             <FormGroup>
                                 <Label for="username">Username</Label>
                                 <Input type="text" name="username" required />
@@ -59,7 +59,7 @@ class Login extends React.Component {
                                 <Label for="password">Password</Label>
                                 <Input type="password" name="password" required />
                             </FormGroup>
-                            <Button outline color="success" type="submit">Login</Button>
+                            <Button outline color="success" type="submit">Register</Button>
                         </Form>
                     </Col>
                 </Row>

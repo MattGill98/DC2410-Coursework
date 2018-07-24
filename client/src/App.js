@@ -4,6 +4,7 @@ import Event from 'layouts/Event.jsx';
 import EventList from 'layouts/EventList.jsx';
 import Login from 'layouts/Login.jsx';
 import NewEvent from 'layouts/NewEvent.jsx';
+import Register from 'layouts/Register.jsx';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -21,20 +22,23 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <Container fluid={true}>
-                    <header>
-                        <NavBar />
-                    </header>
-                    <Router>
-                        <Switch>
-                            <Route path="/event/:id" component={Event} />
-                            <Route path="/events/new" component={NewEvent} />
-                            <Route path="/events" component={EventList} />
-                            <Route path="/login" component={Login} />
-                            <Route path="/" component={EventList} />
-                        </Switch>
-                    </Router>
-                </Container>
+                <Router>
+                    <div>
+                        <header>
+                            <NavBar />
+                        </header>
+                        <Container fluid={true}>
+                            <Switch>
+                                <Route exact path="/event/:id" component={Event} />
+                                <Route exact path="/events/new" component={NewEvent} />
+                                <Route exact path="/events" component={EventList} />
+                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/register" component={Register} />
+                                <Route exact path="/" component={EventList} />
+                            </Switch>
+                        </Container>
+                    </div>
+                </Router>
             </Provider>
         );
     }
