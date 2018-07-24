@@ -1,0 +1,19 @@
+ANYONE CAN
+- List all event information for all events (name, description, date, picture, organiser, venue)
+- Register as a student user or an event organiser
+
+USERS CAN
+- Login
+- Logout
+
+STUDENT USERS CAN
+- List all event information by the three categories (sport/culture/others)
+- List all event information according to popularity
+- List all event information according to dates
+- View details of a specific event
+- Register interest for an event
+
+EVENT ORGANISERS CAN
+- Add new events
+- List all events organised by me
+- Update event organised by me

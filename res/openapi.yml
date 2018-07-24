@@ -1,0 +1,171 @@
+openapi: "3.0.1"
+info:
+  description: "A REST API designed to fulfil the requirements of the DC2410 coursework."
+  version: "1.0"
+  title: "DC2410 Coursework"
+servers:
+  - url: "http://localhost:9000/api"
+    description: "A locally hosted server."
+paths:
+  /events:
+    get:
+      operationId: "getEvents"
+      summary: "Fetch all events."
+      parameters:
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sort the results."
+          schema:
+            type: string
+            enum: ["popularity", "date"]
+        - name: "filter"
+          in: query
+          required: false
+          description: "Filter the results."
+          schema:
+            type: array
+            items:
+              type: string
+              enum: ["me", "sport", "culture", "others"]
+        - name: "limit"
+          in: query
+          required: false
+          description: "Only show the first x results."
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "A list of all the requested events."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+        500:
+          description: "Error fetching events."
+    post:
+      operationId: "createEvent"
+      summary: "Create a new event."
+      requestBody:
+        description: "The event to create."
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+                $ref: "#/components/schemas/NewEvent"
+      responses:
+        200:
+          description: "A successfully created event."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+  /event/{id}:
+    get:
+      operationId: "getEvent"
+      summary: "Get a specific event by ID."
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Event/properties/id'
+      responses:
+        200:
+          description: "The requested event."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        404:
+          description: "The event was not found."
+    put:
+      operationId: "updateEvent"
+      summary: "Update an event by ID."
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Event/properties/id'
+      responses:
+        200:
+          description: "The updated event."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        404:
+          description: "The event was not found."
+  /event/{id}/picture:
+    get:
+      operationId: "getPicture"
+      summary: "Get a picture for a specific event."
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Event/properties/id'
+      responses:
+        200:
+          description: "The picture for the event."
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        404:
+          description: "The event didn't have a picture."
+components:
+  schemas:
+    NewEvent:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: ["sport", "culture", "others"]
+        date:
+          type: string
+          format: date
+        picture:
+          type: string
+          format: binary
+        organiser:
+          type: string
+        venue:
+          type: string
+      required:
+        - name
+        - category
+        - date
+        - organiser
+        - venue
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: ["sport", "culture", "others"]
+        date:
+          type: string
+          format: date
+        picture:
+          type: boolean
+        organiser:
+          type: string
+        venue:
+          type: string

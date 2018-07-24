@@ -1,0 +1,38 @@
+{
+  "name": "dc2410-coursework",
+  "version": "1.0.0",
+  "description": "A project to fulfil the requirements of the DC2410 coursework specification.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node .",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MattGill98/DC2410-Coursework.git"
+  },
+  "author": "Matt Gill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MattGill98/DC2410-Coursework/issues"
+  },
+  "homepage": "https://github.com/MattGill98/DC2410-Coursework#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "express-form-data": "^2.0.6",
+    "express-session": "^1.15.6",
+    "gridfs-stream": "^1.1.1",
+    "mocha": "^5.2.0",
+    "mongodb": "^3.0.10",
+    "mongoose": "^5.1.4",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "sanitize-html": "^1.18.2",
+    "swagger-ui-express": "^3.0.10",
+    "yamljs": "^0.3.0"
+  }
+}
