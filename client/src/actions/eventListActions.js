@@ -7,11 +7,11 @@ export const fetchEventsBegin = () => ({
 });
 export const fetchEventsSuccess = (events) => ({
     type: FETCH_EVENTS_SUCCESS,
-    payload: {events}
+    payload: events
 });
 export const fetchEventsFailure = (error) => ({
     type: FETCH_EVENTS_FAILURE,
-    payload: {error}
+    payload: error
 });
 
 export function fetchEvents() {

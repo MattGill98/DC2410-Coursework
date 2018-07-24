@@ -1,116 +1,108 @@
 import React from 'react';
+import { createEvent } from 'actions/eventActions.js';
 import { Link, Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
 import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap';
 
-export default class NewEvent extends React.Component {
+const mapStateToProps = state => {
+    return {
+        error: state.Event.error,
+        creating: state.Event.creating,
+        created: state.Event.created,
+    };
+};
+
+class NewEvent extends React.Component {
 
     constructor(props) {
         super(props);
 
-        // Store page state
-        this.state = {
-            created: false,
-            errors: {}
-        };
-        this.create = this.create.bind(this);
+        this.startCreate = this.startCreate.bind(this);
     }
 
-    create(e) {
+    startCreate(e) {
         e.preventDefault();
         e.stopPropagation();
 
         var data = new FormData(document.forms.namedItem('eventForm'));
-
-        fetch('/api/events/',
-            {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Accept': 'application/json'
-                },
-                body: data
-            })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-                if (res.errors != null) {
-                    throw res.errors;
-                } else {
-                    this.setState({ created: true })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                this.setState({ errors: err });
-            });
+        this.props.dispatch(createEvent(data));
     }
 
     render() {
-        if (this.state.created === true) {
+        const { error, created, creating } = this.props;
+
+        const creationErrors = (error)? error : {};
+
+        if (created === true) {
             return <Redirect to='/events' />
         }
+
+        if (creating === true) {
+            return <div>Deleting...</div>
+        }
+
         return (
             <div>
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
                 <Row>
                     <Col sm="4">
-                        <Form onSubmit={this.create} id="eventForm">
+                        <Form onSubmit={this.startCreate} id="eventForm">
                             <FormGroup>
                                 <Label for="name">Event Name</Label>
-                                <Input invalid={this.state.errors.name != null} type="text" name="name" required />
+                                <Input invalid={creationErrors.name != null} type="text" name="name" required />
                                 <FormFeedback>{
-                                    this.state.errors.name == null ?
+                                    creationErrors.name == null ?
                                         "Invalid name" :
-                                        this.state.errors.name.message}
+                                        creationErrors.name.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="category">Event Category</Label>
-                                <Input invalid={this.state.errors.category != null} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
+                                <Input invalid={creationErrors.category != null} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
                                     <option>sport</option>
                                     <option>culture</option>
                                     <option>other</option>
                                 </Input>
                                 <FormFeedback>{
-                                    this.state.errors.category == null ?
+                                    creationErrors.category == null ?
                                         "Invalid category" :
-                                        this.state.errors.category.message}
+                                        creationErrors.category.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="description">Description</Label>
-                                <Input invalid={this.state.errors.description != null} type="text" name="description" />
+                                <Input invalid={creationErrors.description != null} type="text" name="description" />
                                 <FormFeedback>{
-                                    this.state.errors.description == null ?
+                                    creationErrors.description == null ?
                                         "Invalid description" :
-                                        this.state.errors.description.message}
+                                        creationErrors.description.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="date">Date</Label>
-                                <Input invalid={this.state.errors.date != null} type="date" name="date" required />
+                                <Input invalid={creationErrors.date != null} type="date" name="date" required />
                                 <FormFeedback>{
-                                    this.state.errors.date == null ?
+                                    creationErrors.date == null ?
                                         "Invalid date" :
-                                        this.state.errors.date.message}
+                                        creationErrors.date.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="venue">Venue</Label>
-                                <Input invalid={this.state.errors.venue != null} type="text" name="venue" required />
+                                <Input invalid={creationErrors.venue != null} type="text" name="venue" required />
                                 <FormFeedback>{
-                                    this.state.errors.venue == null ?
+                                    creationErrors.venue == null ?
                                         "Invalid venue" :
-                                        this.state.errors.venue.message}
+                                        creationErrors.venue.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="picture">Picture</Label>
-                                <Input invalid={this.state.errors.picture != null} type="file" name="picture" />
+                                <Input invalid={creationErrors.picture != null} type="file" name="picture" />
                                 <FormFeedback>{
-                                    this.state.errors.picture == null ?
+                                    creationErrors.picture == null ?
                                         "Invalid picture" :
-                                        this.state.errors.picture.message}
+                                        creationErrors.picture.message}
                                 </FormFeedback>
                             </FormGroup>
                             <input type="hidden" name="organiser" value="Matt Gill" />
@@ -122,3 +114,5 @@ export default class NewEvent extends React.Component {
         );
     }
 }
+
+export default connect(mapStateToProps)(NewEvent);

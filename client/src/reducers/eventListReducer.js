@@ -18,13 +18,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                items: action.payload.events
+                items: action.payload
             };
         case FETCH_EVENTS_FAILURE:
             return {
                 ...state,
                 loading: false,
-                error: action.payload.error,
+                error: action.payload,
                 items: []
             };
         default:

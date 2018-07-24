@@ -71,12 +71,12 @@ app.post('/api/events', (request, response) => {
 
     Event.create(request.body, (err, createdEvent)  => {
         if (err != null) {
-            response.send(err);
+            response.status(500).send(err);
         } else {
             if (picturePath != null) {
                 Picture.create(createdEvent._id.toString(), picturePath, (err, createdPicture) => {
                     if (err != null) {
-                        response.send(err);
+                        response.status(500).send(err);
                     } else {
                         createdEvent.picture = true;
                         Event.update(createdEvent._id.toString(), createdEvent, (err, res) => {
@@ -120,13 +120,13 @@ app.delete('/api/event/:id', (request, response) => {
 app.get('/api/event/:id/picture', (request, response) => {
     Event.read(request.params.id, (err, res) => {
         if (err != null) {
-            response.send(err);
+            response.status(500).send(err);
         } else if (res == null) {
             response.send("No event found.");
         } else if (res.picture) {
             Picture.read(request.params.id, (err, res) => {
                 if (err) {
-                    response.send(err);
+                    throw new Error(err);
                 } else {
                     res.pipe(response);
                 }
@@ -156,7 +156,7 @@ app.delete('/api/users', (request, response) => {
 function getDefaultCallback(response) {
     return (err, res) => {
         if (err) {
-            response.send(err);
+            response.status(500).send(err);
         } else {
             response.send(res);
         }
