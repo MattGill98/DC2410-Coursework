@@ -1,31 +1,52 @@
-import { FETCH_EVENTS_BEGIN, FETCH_EVENTS_FAILURE, FETCH_EVENTS_SUCCESS } from 'actions/eventActions.js';
+import { DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS } from 'actions/eventActions.js';
 
 const initialState = {
-    items: [],
+    eventData: {},
     loading: false,
-    error: null
+    error: null,
+    deleting: false,
+    deleted: false,
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case FETCH_EVENTS_BEGIN:
+        case FETCH_EVENT_BEGIN:
             return {
                 ...state,
                 loading: true,
                 error: null
             };
-        case FETCH_EVENTS_SUCCESS:
+        case FETCH_EVENT_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                items: action.payload.events
+                eventData: action.payload
             };
-        case FETCH_EVENTS_FAILURE:
+        case FETCH_EVENT_FAILURE:
             return {
                 ...state,
                 loading: false,
-                error: action.payload.error,
-                items: []
+                error: action.payload,
+                eventData: {}
+            };
+        
+        case DELETE_EVENT_BEGIN:
+            return {
+                ...state,
+                deleting: true,
+                error: null
+            };
+        case DELETE_EVENT_SUCCESS:
+            return {
+                ...state,
+                deleting: false,
+                deleted: true
+            };
+        case DELETE_EVENT_FAILURE:
+            return {
+                ...state,
+                deleting: false,
+                deleted: false
             };
         default:
             return state;

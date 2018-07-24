@@ -1,37 +1,41 @@
+import { deleteEvent, fetchEvent } from 'actions/eventActions.js';
 import dateFormat from 'dateformat';
 import reactLogo from 'images/logo.svg';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link, Redirect } from "react-router-dom";
 import { Button, Card, CardBody, CardTitle, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import titlecase from 'title-case';
 
-export default class Event extends React.Component {
+const mapStateToProps = state => {
+    return {
+        eventData: state.Event.eventData,
+        loading: state.Event.loading,
+        error: state.Event.error,
+        deleting: state.Event.deleting,
+        deleted: state.Event.deleted,
+    };
+};
+
+class Event extends React.Component {
 
     constructor(props) {
         super(props);
 
-        // Store page state
         this.state = {
-            eventId: props.match.params.id,
-            event: {},
-            modal: false,
-            deleted: false
+            eventID: props.match.params.id,
+            modal: false
         };
         this.toggleModal = this.toggleModal.bind(this);
-        this.deleteEvent = this.deleteEvent.bind(this);
+        this.startDelete = this.startDelete.bind(this);
     }
 
     componentDidMount() {
-        fetch('/api/event/' + this.state.eventId)
-            .then(res => res.json())
-            .then(res => this.setState({ event: res }))
-            .catch(err => { console.log(err); this.setState({ deleted: true }) });
+        this.props.dispatch(fetchEvent(this.state.eventID));
     }
 
-    deleteEvent() {
-        fetch('/api/event/' + this.state.eventId, { method: 'delete' })
-            .then(res => this.setState({ deleted: true }))
-            .catch(err => console.log(err));
+    startDelete() {
+        this.props.dispatch(deleteEvent(this.state.eventID));
     }
 
     toggleModal() {
@@ -41,9 +45,24 @@ export default class Event extends React.Component {
     }
 
     render() {
-        if (this.state.deleted === true) {
+        const { eventData, loading, error, deleted, deleting } = this.props;
+
+        if (error) {
+            return <div>Error!</div>
+        }
+
+        if (loading) {
+            return <div>Loading...</div>
+        }
+
+        if (deleted === true) {
             return <Redirect to='/events' />
         }
+
+        if (deleting === true) {
+            return <div>Deleting...</div>
+        }
+
         return (
             <div>
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
@@ -52,7 +71,7 @@ export default class Event extends React.Component {
                     <ModalHeader toggle={this.toggleModal}>Delete Event</ModalHeader>
                     <ModalBody>Are you sure?</ModalBody>
                     <ModalFooter>
-                        <Button color="danger" onClick={this.deleteEvent}>I'm sure</Button>{' '}
+                        <Button color="danger" onClick={this.startDelete}>I'm sure</Button>{' '}
                         <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
@@ -60,21 +79,21 @@ export default class Event extends React.Component {
                     <Col key={this.state.eventId} sm="3">
                         <Card className="text-center">
                             {
-                                this.state.event.picture ?
-                                    <img width="100%" src={"/api/event/" + this.state.event._id + "/picture"} alt={this.state.event.name} /> :
-                                    <img width="100%" src={reactLogo} alt={this.state.event.name} />
+                                eventData.picture ?
+                                    <img width="100%" src={"/api/event/" + eventData._id + "/picture"} alt={eventData.name} /> :
+                                    <img width="100%" src={reactLogo} alt={eventData.name} />
                             }
                             <CardBody>
-                                <CardTitle className="align-center">{titlecase(this.state.event.name)}</CardTitle>
+                                <CardTitle className="align-center">{titlecase(eventData.name)}</CardTitle>
                                 <table className="table table-bordered">
                                     <tbody>
-                                        <tr><td>Date</td><td>{dateFormat(this.state.event.date, 'dS mmmm yyyy')}</td></tr>
-                                        <tr><td>Category</td><td>{this.state.event.category}</td></tr>
-                                        <tr><td>Venue</td><td>{this.state.event.venue}</td></tr>
-                                        <tr><td>Organiser</td><td>{this.state.event.organiser}</td></tr>
+                                        <tr><td>Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
+                                        <tr><td>Category</td><td>{eventData.category}</td></tr>
+                                        <tr><td>Venue</td><td>{eventData.venue}</td></tr>
+                                        <tr><td>Organiser</td><td>{eventData.organiser}</td></tr>
                                     </tbody>
                                 </table>
-                                <Button outline block color="primary" tag={Link} to={"/event/" + this.state.event._id}>View Event</Button>
+                                <Button outline block color="primary" tag={Link} to={"/event/" + this.state.eventId}>View Event</Button>
                             </CardBody>
                         </Card>
                     </Col>
@@ -83,3 +102,5 @@ export default class Event extends React.Component {
         );
     }
 }
+
+export default connect(mapStateToProps)(Event);
