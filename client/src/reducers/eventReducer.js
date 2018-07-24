@@ -14,7 +14,9 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loading: true,
-                error: null
+                error: null,
+                deleting: false,
+                deleted: false
             };
         case FETCH_EVENT_SUCCESS:
             return {
