@@ -26,7 +26,9 @@ class Login extends React.Component {
         e.stopPropagation();
 
         var data = new FormData(document.forms.namedItem('loginForm'));
-        this.props.dispatch(login(data));
+        if (!this.props.authenticated) {
+            this.props.dispatch(login(data));
+        }
     }
 
     render() {

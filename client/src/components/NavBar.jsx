@@ -1,5 +1,6 @@
 import React from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { connect } from 'react-redux';
 
 const state = {
     isOpen: false
@@ -9,9 +10,17 @@ function toggle() {
     state.isOpen = !state.isOpen;
 }
 
-const NavBar = () => (
+const mapStateToProps = state => {
+    return {
+        username: state.User.username
+    };
+};
+
+const NavBar = ({ username }) => (
     <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">DC2410 Coursework</NavbarBrand>
+        {(username)?
+            <NavbarBrand href="/">{username}</NavbarBrand>:
+            <NavbarBrand href="/">DC2410 Coursework</NavbarBrand>}
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
@@ -26,4 +35,4 @@ const NavBar = () => (
     </Navbar>
 );
 
-export default NavBar;
+export default connect(mapStateToProps)(NavBar);
