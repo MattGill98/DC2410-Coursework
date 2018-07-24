@@ -9,14 +9,17 @@ function toggle() {
     state.isOpen = !state.isOpen;
 }
 
-const NavBar = ({ event }) => (
+const NavBar = () => (
     <Navbar color="light" light expand="md">
         <NavbarBrand href="/">DC2410 Coursework</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
                 <NavItem>
-                    <NavLink href="/events/">Events</NavLink>
+                    <NavLink href="/events">Events</NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink href="/login">Login</NavLink>
                 </NavItem>
             </Nav>
         </Collapse>

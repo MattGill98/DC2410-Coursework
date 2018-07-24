@@ -14,20 +14,28 @@ export const loginFailure = (error) => ({
     payload: error
 });
 
-export function login(username, password) {
+export function login(data) {
     return dispatch => {
         dispatch(loginBegin());
-        return fetch('/api/events')
+        fetch('/api/login/',
+                {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    body: data
+                })
             .then(res => {
                 if (!res.ok) {
-                    throw new Error(res.statusText);
+                    throw res;
                 }
-                return res.json();
+                return res.text();
             })
             .then(res => {
-                dispatch(fetchEventsSuccess(res));
+                dispatch(loginSuccess(res));
                 return res;
             })
-            .catch(err => dispatch(fetchEventsFailure(err)));
+            .catch(res => res.text().then(err => dispatch(loginFailure(err))));
     };
 }
