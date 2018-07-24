@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node .",
+    "mongo": "mongod --dbpath ./mongodata --logpath ./mongodata/mongo.log",
     "test": "mocha"
   },
   "repository": {
