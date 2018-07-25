@@ -17,14 +17,7 @@ app.use(formData.union());
 
 // Configure passport
 const passport = require('passport');
-const expressSession = require('express-session');
-app.use(expressSession({
-    secret: 'mySecretKey',
-    resave: false,
-    saveUninitialized: false
-}));
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Deploy OpenAPI
 const swaggerUI = require('swagger-ui-express');
@@ -137,12 +130,28 @@ app.get('/api/event/:id/picture', (request, response) => {
     });
 })
 
-app.post('/api/login', passport.authenticate('login'), (request, response) => {
-    response.send(request.session.passport.user.toString());
+app.post('/api/login', (req, res, next) => {
+    passport.authenticate('login', { session: false }, (err, user, info) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        if (!user) {
+            return res.status(500).send(info);
+        }
+        return res.send(user);
+    })(req, res, next);
 });
 
-app.post('/api/register', passport.authenticate('register'), (request, response) => {
-    response.send(request.session.passport.user.toString());
+app.post('/api/register', (req, res, next) => {
+    passport.authenticate('register', { session: false }, (err, user, info) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        if (!user) {
+            return res.status(500).send(info);
+        }
+        return res.send(user);
+    })(req, res, next);
 });
 
 app.get('/api/users', (request, response) => {

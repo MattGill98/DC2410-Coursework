@@ -1,10 +1,15 @@
 const sanitizeHTML = require('sanitize-html');
 const bcrypt = require('bcrypt-nodejs');
 
-const passport = require('passport'),  
-      LocalStrategy = require('passport-local');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const jwt = require('jsonwebtoken');
 
-const localOptions = { usernameField: 'email'};
+const jwtSecret = 'turtles';
+
+const passportOptions = {
+    passReqToCallback: true
+};
 
 module.exports = function (mongoose) {
     const userSchema = new mongoose.Schema(
@@ -36,21 +41,8 @@ module.exports = function (mongoose) {
         }
     );
 
-    // Explain how to turn user into JWT
-    passport.serializeUser((user, done) => {
-        done(null, user._id);
-    });
-    passport.deserializeUser((id, done) => {
-        User.findById(id, (err, user) => {
-            done(err, user);
-        });
-    });
-
     // Define how to login
-    passport.use('login', new LocalStrategy(
-        {
-            passReqToCallback: true
-        },
+    passport.use('login', new LocalStrategy(passportOptions,
         (req, username, password, done) => {
             User.findOne({ username: username }, (err, user) => {
                 if (err) return done(err);
@@ -61,32 +53,29 @@ module.exports = function (mongoose) {
                     if (err) return done(err);
                     if (!isMatch) return done(null, false, { error: "Incorrect password." });
 
-                    return done(null, user);
+                    done(null, jwt.sign(user.name, jwtSecret));
                 });
             });
         }
     ));
 
     // Define how to register
-    passport.use('register', new LocalStrategy(
-        {
-            passReqToCallback: true
-        },
+    passport.use('register', new LocalStrategy(passportOptions,
         (req, username, password, done) => {
             var userObj = {};
             userObj.username = username;
             userObj.password = password;
             userObj.name = req.params.name;
-            const newUser = new User(userObj);
-            User.findOne({ username: newUser.username }, (err, user) => {
+            const user = new User(userObj);
+            User.findOne({ username: user.username }, (err, res) => {
                 if (err) return done(err);
 
-                if (user) return done(null, false, { error: "Username taken." });
+                if (res) return done(null, false, { error: "Username taken." });
 
-                newUser.save(err => {
+                user.save(err => {
                     if (err) throw err;
 
-                    done(null, newUser);
+                    done(null, jwt.sign(user.name, jwtSecret));
                 });
             });
         }
@@ -97,6 +86,10 @@ module.exports = function (mongoose) {
         const user = this;
         const SALT_FACTOR = 5;
         if (!user.isModified('password')) return next();
+
+        if (user.name == null) {
+            user.name = user.username;
+        }
 
         bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
             if (err) return next(err);
