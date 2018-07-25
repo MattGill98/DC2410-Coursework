@@ -59,6 +59,10 @@ class Login extends React.Component {
                                 <Label for="password">Password</Label>
                                 <Input type="password" name="password" required />
                             </FormGroup>
+                            <FormGroup>
+                                <Label for="name">Name</Label>
+                                <Input type="text" name="name" />
+                            </FormGroup>
                             <Button outline color="success" type="submit">Register</Button>
                         </Form>
                     </Col>

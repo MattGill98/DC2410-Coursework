@@ -68,7 +68,7 @@ module.exports = function (mongoose) {
             var userObj = {};
             userObj.username = username;
             userObj.password = password;
-            userObj.name = req.params.name;
+            userObj.name = req.body.name;
             const user = new User(userObj);
             User.findOne({ username: user.username }, (err, res) => {
                 if (err) return done(err);
@@ -93,7 +93,7 @@ module.exports = function (mongoose) {
         const SALT_FACTOR = 5;
         if (!user.isModified('password')) return next();
 
-        if (user.name == null) {
+        if (user.name == null || user.name === "") {
             user.name = user.username;
         }
 
