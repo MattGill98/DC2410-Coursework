@@ -1,38 +1,28 @@
-export const LOGIN_BEGIN = 'LOGIN_BEGIN';
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const AUTHENTICATION_BEGIN = 'AUTHENTICATION_BEGIN';
+export const AUTHENTICATION_SUCCESS = 'AUTHENTICATION_SUCCESS';
+export const AUTHENTICATION_FAILURE = 'AUTHENTICATION_FAILURE';
 
-export const REGISTER_BEGIN = 'REGISTER_BEGIN';
-export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const REGISTER_FAILURE = 'REGISTER_FAILURE';
+export const LOGOUT = 'LOGOUT';
 
-export const loginBegin = () => ({
-    type: LOGIN_BEGIN
+export const authenticationBegin = () => ({
+    type: AUTHENTICATION_BEGIN
 });
-export const loginSuccess = (user) => ({
-    type: LOGIN_SUCCESS,
-    payload: user.name
+export const authenticationSuccess = (res) => ({
+    type: AUTHENTICATION_SUCCESS,
+    payload: res
 });
-export const loginFailure = (error) => ({
-    type: LOGIN_FAILURE,
+export const authenticationFailure = (error) => ({
+    type: AUTHENTICATION_FAILURE,
     payload: error
 });
 
-export const registerBegin = () => ({
-    type: REGISTER_BEGIN
-});
-export const registerSuccess = (user) => ({
-    type: REGISTER_SUCCESS,
-    payload: user.name
-});
-export const registerFailure = (error) => ({
-    type: REGISTER_FAILURE,
-    payload: error
-});
+export const logout = () => ({
+    type: LOGOUT
+})
 
 export function login(data) {
     return dispatch => {
-        dispatch(loginBegin());
+        dispatch(authenticationBegin());
         fetch('/api/login/',
                 {
                     method: 'POST',
@@ -46,19 +36,19 @@ export function login(data) {
                 if (!res.ok) {
                     throw res;
                 }
-                return res.text();
+                return res.json();
             })
             .then(res => {
-                dispatch(loginSuccess(res));
+                dispatch(authenticationSuccess(res));
                 return res;
             })
-            .catch(res => res.text().then(err => dispatch(loginFailure(err))));
+            .catch(res => res.json().then(err => dispatch(authenticationFailure(err))));
     };
 }
 
 export function register(data) {
     return dispatch => {
-        dispatch(registerBegin());
+        dispatch(authenticationBegin());
         fetch('/api/register/',
                 {
                     method: 'POST',
@@ -72,12 +62,12 @@ export function register(data) {
                 if (!res.ok) {
                     throw res;
                 }
-                return res.text();
+                return res.json();
             })
             .then(res => {
-                dispatch(registerSuccess(res));
+                dispatch(authenticationSuccess(res));
                 return res;
             })
-            .catch(res => res.text().then(err => dispatch(registerFailure(err))));
+            .catch(res => res.json().then(err => dispatch(authenticationFailure(err))));
     };
 }

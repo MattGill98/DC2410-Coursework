@@ -1,7 +1,8 @@
-import { LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_FAILURE, REGISTER_BEGIN, REGISTER_SUCCESS, REGISTER_FAILURE } from 'actions/userActions.js';
+import { AUTHENTICATION_BEGIN, AUTHENTICATION_SUCCESS, AUTHENTICATION_FAILURE, LOGOUT } from 'actions/userActions.js';
 
 const initialState = {
     username: null,
+    token: null,
     authenticating: false,
     authenticated: false,
     error: null
@@ -9,43 +10,31 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case LOGIN_BEGIN:
+        case AUTHENTICATION_BEGIN:
             return {
                 ...initialState,
                 authenticating: true
             };
-        case LOGIN_SUCCESS:
+        case AUTHENTICATION_SUCCESS:
             return {
                 ...state,
                 authenticating: false,
                 authenticated: true,
-                username: action.payload
+                username: action.payload.name,
+                token: action.payload.token
             };
-        case LOGIN_FAILURE:
+        case AUTHENTICATION_FAILURE:
             return {
                 ...state,
                 authenticating: false,
+                authenticated: false,
                 error: action.payload
             };
         
-            case REGISTER_BEGIN:
-                return {
-                    ...initialState,
-                    authenticating: true
-                };
-            case REGISTER_SUCCESS:
-                return {
-                    ...state,
-                    authenticating: false,
-                    authenticated: true,
-                    username: action.payload
-                };
-            case REGISTER_FAILURE:
-                return {
-                    ...state,
-                    authenticating: false,
-                    error: action.payload
-                };
+        case LOGOUT:
+            return {
+                ...initialState
+            };
         default:
             return state;
     }

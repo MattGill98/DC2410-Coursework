@@ -53,7 +53,10 @@ module.exports = function (mongoose) {
                     if (err) return done(err);
                     if (!isMatch) return done(null, false, { error: "Incorrect password." });
 
-                    done(null, jwt.sign(user.name, jwtSecret));
+                    done(null, {
+                        name: user.name,
+                        token: jwt.sign(user.username, jwtSecret)
+                    });
                 });
             });
         }
@@ -75,7 +78,10 @@ module.exports = function (mongoose) {
                 user.save(err => {
                     if (err) throw err;
 
-                    done(null, jwt.sign(user.name, jwtSecret));
+                    done(null, {
+                        name: user.name,
+                        token: jwt.sign(user.username, jwtSecret)
+                    });
                 });
             });
         }
