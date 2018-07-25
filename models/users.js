@@ -55,7 +55,8 @@ module.exports = function (mongoose) {
 
                     done(null, {
                         name: user.name,
-                        token: jwt.sign(user.username, jwtSecret)
+                        token: jwt.sign(user.username, jwtSecret),
+                        role: user.role
                     });
                 });
             });
@@ -80,7 +81,8 @@ module.exports = function (mongoose) {
 
                     done(null, {
                         name: user.name,
-                        token: jwt.sign(user.username, jwtSecret)
+                        token: jwt.sign(user.username, jwtSecret),
+                        role: user.role
                     });
                 });
             });

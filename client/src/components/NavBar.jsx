@@ -4,17 +4,10 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 
-const state = {
-    isOpen: false
-};
-
-function toggle() {
-    state.isOpen = !state.isOpen;
-}
-
 const mapStateToProps = state => {
     return {
-        username: state.User.username
+        username: state.User.username,
+        role: state.User.role
     };
 };
 
@@ -29,14 +22,11 @@ function NavItems(props) {
                     <NavLink tag={Link} to="/login">Login</NavLink>
                 </NavItem>
             </Nav>
-            );
+        );
     }
 
     return (
         <Nav className="ml-auto" navbar>
-            <NavItem>
-                <NavLink tag={Link} to="/events">Events</NavLink>
-            </NavItem>
             <NavItem>
                 <NavLink tag={Link} to="#" onClick={e => {props.dispatch(logout())}}>Logout</NavLink>
             </NavItem>
@@ -44,17 +34,49 @@ function NavItems(props) {
     );
 }
 
-const NavBar = ({ dispatch, username }) => (
-    <Navbar color="light" light expand="md">
-        {(username) ?
-            <NavbarBrand tag={Link} to="/">Hello {username}!</NavbarBrand> :
-            <NavbarBrand tag={Link} to="/">DC2410 Coursework</NavbarBrand>
-        }
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={state.isOpen} navbar>
-            <NavItems username={username} dispatch={dispatch} />
-        </Collapse>
-    </Navbar>
-);
+function WelcomeMessage(props) {
+    if (!props.username || !props.role) {
+        return null;
+    }
+
+    return (
+        <span class="navbar-text">
+            Hello {props.username}! ({props.role})
+        </span>
+    );
+}
+
+class NavBar extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isOpen: false
+        };
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
+
+    render() {
+        const {dispatch, username, role} = this.props;
+
+        return (
+            <Navbar color="light" light expand="md" className="text-center" >
+                <NavbarBrand tag={Link} to="/">DC2410 Coursework</NavbarBrand>
+                <WelcomeMessage username={username} role={role} />
+                <NavbarToggler onClick={this.toggle} />
+                <Collapse isOpen={this.state.isOpen} navbar>
+                    <NavItems dispatch={dispatch} username={username} role={role} />
+                </Collapse>
+            </Navbar>
+        );
+    }
+};
 
 export default connect(mapStateToProps)(NavBar);

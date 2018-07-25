@@ -2,6 +2,7 @@ import { AUTHENTICATION_BEGIN, AUTHENTICATION_SUCCESS, AUTHENTICATION_FAILURE, L
 
 const initialState = {
     username: null,
+    role: null,
     token: null,
     authenticating: false,
     authenticated: false,
@@ -21,7 +22,8 @@ export default (state = initialState, action) => {
                 authenticating: false,
                 authenticated: true,
                 username: action.payload.name,
-                token: action.payload.token
+                token: action.payload.token,
+                role: action.payload.role
             };
         case AUTHENTICATION_FAILURE:
             return {
