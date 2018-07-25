@@ -1,4 +1,4 @@
-import { deleteEvent, fetchEvent } from 'actions/eventActions.js';
+import { deleteEvent, fetchEvent, fetchEventBegin } from 'actions/eventActions.js';
 import dateFormat from 'dateformat';
 import reactLogo from 'images/logo.svg';
 import React from 'react';
@@ -28,6 +28,7 @@ class Event extends React.Component {
         };
         this.toggleModal = this.toggleModal.bind(this);
         this.startDelete = this.startDelete.bind(this);
+        this.finishDelete = this.finishDelete.bind(this);
     }
 
     componentDidMount() {
@@ -36,6 +37,10 @@ class Event extends React.Component {
 
     startDelete() {
         this.props.dispatch(deleteEvent(this.state.eventID));
+    }
+
+    finishDelete() {
+        this.props.dispatch(fetchEventBegin());
     }
 
     toggleModal() {
@@ -56,6 +61,7 @@ class Event extends React.Component {
         }
 
         if (deleted === true) {
+            this.finishDelete();
             return <Redirect to='/events' />
         }
 

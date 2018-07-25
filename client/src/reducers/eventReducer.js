@@ -35,6 +35,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 deleting: true,
+                deleted: false,
                 error: null
             };
         case DELETE_EVENT_SUCCESS:
@@ -55,6 +56,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 creating: true,
+                created: false,
                 error: null
             };
         case CREATE_EVENT_SUCCESS:
