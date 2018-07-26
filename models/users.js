@@ -1,26 +1,11 @@
 const sanitizeHTML = require('sanitize-html');
 const bcrypt = require('bcrypt-nodejs');
+const securityConf = require('../config/security.js');
 
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local');
 const jwt = require('jsonwebtoken');
-
-const jwtSecret = 'turtles';
-
-const localOptions = {
-    passReqToCallback: true
-};
-
-const jwtOptions = {
-    jwtFromRequest: (req) => {
-        if (req && req.cookies) {
-            return req.cookies['dc2410'];
-        }
-        return null;
-    },
-    secretOrKey: jwtSecret
-};
 
 module.exports = function (mongoose) {
     const userSchema = new mongoose.Schema(
@@ -54,7 +39,7 @@ module.exports = function (mongoose) {
     const User = mongoose.model('User', userSchema);
 
     // Define how to login
-    passport.use('login', new LocalStrategy(localOptions, (req, username, password, done) => {
+    passport.use('login', new LocalStrategy(securityConf.localOptions, (req, username, password, done) => {
         User.findOne({ username: username }, (err, user) => {
             if (err) return done(err);
 
@@ -66,7 +51,7 @@ module.exports = function (mongoose) {
 
                 done(null, {
                     name: user.name,
-                    token: jwt.sign(user._id.toString(), jwtSecret),
+                    token: jwt.sign(user._id.toString(), securityConf.jwtSecret),
                     role: user.role
                 });
             });
@@ -74,7 +59,7 @@ module.exports = function (mongoose) {
     }));
 
     // Define how to register
-    passport.use('register', new LocalStrategy(localOptions, (req, username, password, done) => {
+    passport.use('register', new LocalStrategy(securityConf.localOptions, (req, username, password, done) => {
         var userObj = {};
         userObj.username = username;
         userObj.password = password;
@@ -90,7 +75,7 @@ module.exports = function (mongoose) {
 
                 done(null, {
                     name: user.name,
-                    token: jwt.sign(user._id.toString(), jwtSecret),
+                    token: jwt.sign(user._id.toString(), securityConf.jwtSecret),
                     role: user.role
                 });
             });
@@ -98,7 +83,7 @@ module.exports = function (mongoose) {
     }));
 
     // Define how to verify the user identity
-    passport.use('verify', new JwtStrategy(jwtOptions, (payload, done) => {
+    passport.use('verify', new JwtStrategy(securityConf.jwtOptions, (payload, done) => {
         User.findOne({ _id: payload}, (err, user) => {
             if (err) return done(err);
 

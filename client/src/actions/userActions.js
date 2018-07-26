@@ -71,3 +71,9 @@ export function register(data) {
             .catch(res => res.json().then(err => dispatch(authenticationFailure(err))));
     };
 }
+
+export function performLogout() {
+    return dispatch => {
+        fetch('/api/logout').then(res => {dispatch(logout())});
+    };
+}

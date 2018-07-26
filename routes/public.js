@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const securityConf = require('../config/security.js');
 
 module.exports = function (Event, Picture, User) {
     // Fetch all events
@@ -119,9 +120,7 @@ module.exports = function (Event, Picture, User) {
                 return res.status(500).send(info);
             }
             return res
-                .cookie('dc2410', user.token, {
-                    httpOnly: true
-                })
+                .cookie(securityConf.cookieName, user.token, securityConf.cookieOptions)
                 .send(user);
         })(req, res, next);
     });
@@ -136,16 +135,14 @@ module.exports = function (Event, Picture, User) {
                 return res.status(500).send(info);
             }
             return res
-                .cookie('dc2410', user.token, {
-                    httpOnly: true
-                })
+                .cookie(securityConf.cookieName, user.token, securityConf.cookieOptions)
                 .send(user);
         })(req, res, next);
     });
 
     // Logout
     router.get('/logout', (request, response) => {
-        response.clearCookie('dc2410');
+        response.clearCookie(securityConf.cookieName);
         response.send('OK');
     });
 
