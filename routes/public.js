@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-module.exports = function (Event, Picture) {
+module.exports = function (Event, Picture, User) {
     // Fetch all events
     router.get('/events', (request, response) => {
         if (request.query.filter == null) {
@@ -84,15 +84,6 @@ module.exports = function (Event, Picture) {
         });
     })
 
-    // Delete a specific event
-    router.delete('/event/:id', (request, response) => {
-        Event.delete(request.params.id, (err, res) => {
-            if (err) return response.status(500).send(err);
-            response.send(res);
-        });
-        Picture.delete(request.params.id);
-    })
-
     // Delete all events
     router.delete("/events", (request, response) => {
         Event.deleteAll((err, res) => {
@@ -127,7 +118,11 @@ module.exports = function (Event, Picture) {
             if (!user) {
                 return res.status(500).send(info);
             }
-            return res.send(user);
+            return res
+                .cookie('dc2410', user.token, {
+                    httpOnly: true
+                })
+                .send(user);
         })(req, res, next);
     });
 
@@ -140,8 +135,18 @@ module.exports = function (Event, Picture) {
             if (!user) {
                 return res.status(500).send(info);
             }
-            return res.send(user);
+            return res
+                .cookie('dc2410', user.token, {
+                    httpOnly: true
+                })
+                .send(user);
         })(req, res, next);
+    });
+
+    // Logout
+    router.get('/logout', (request, response) => {
+        response.clearCookie('dc2410');
+        response.send('OK');
     });
 
     return router;

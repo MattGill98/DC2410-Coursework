@@ -6,6 +6,10 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Configure cookie parsing
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 // Configure form processing
 const formData = require('express-form-data');
 app.use(formData.parse({
@@ -33,7 +37,8 @@ const User = require('./models/users.js')(mongoose);
 const Event = require('./models/events.js')(mongoose);
 const Picture = require('./models/pictures.js')(mongoose);
 
-// Add public routes
-app.use('/api', require('./routes/public.js')(Event, Picture));
+// Add routes
+app.use('/api', require('./routes/public.js')(Event, Picture, User));
+app.use('/api', require('./routes/member.js')(Event, Picture, User));
 
 module.exports = app;
