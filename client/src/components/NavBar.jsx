@@ -1,4 +1,4 @@
-import { performLogout } from 'actions/userActions.js';
+import { logout } from 'actions/userActions.js';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
@@ -28,7 +28,7 @@ function NavItems(props) {
     return (
         <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink tag={Link} to="#" onClick={e => {props.dispatch(performLogout())}}>Logout</NavLink>
+                <NavLink tag={Link} to="#" onClick={e => {props.dispatch(logout())}}>Logout</NavLink>
             </NavItem>
         </Nav>
     );

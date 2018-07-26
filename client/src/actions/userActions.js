@@ -2,7 +2,9 @@ export const AUTHENTICATION_BEGIN = 'AUTHENTICATION_BEGIN';
 export const AUTHENTICATION_SUCCESS = 'AUTHENTICATION_SUCCESS';
 export const AUTHENTICATION_FAILURE = 'AUTHENTICATION_FAILURE';
 
-export const LOGOUT = 'LOGOUT';
+export const DEAUTHENTICATION_BEGIN = 'DEAUTHENTICATION_BEGIN';
+export const DEAUTHENTICATION_SUCCESS = 'DEAUTHENTICATION_SUCCESS';
+export const DEAUTHENTICATION_FAILURE = 'DEAUTHENTICATION_FAILURE';
 
 export const authenticationBegin = () => ({
     type: AUTHENTICATION_BEGIN
@@ -16,9 +18,16 @@ export const authenticationFailure = (error) => ({
     payload: error
 });
 
-export const logout = () => ({
-    type: LOGOUT
-})
+export const deauthenticationBegin = () => ({
+    type: DEAUTHENTICATION_BEGIN
+});
+export const deauthenticationSuccess = () => ({
+    type: DEAUTHENTICATION_SUCCESS
+});
+export const deauthenticationFailure = (error) => ({
+    type: DEAUTHENTICATION_FAILURE,
+    payload: error
+});
 
 export function login(data) {
     return dispatch => {
@@ -72,8 +81,20 @@ export function register(data) {
     };
 }
 
-export function performLogout() {
+export function logout() {
     return dispatch => {
-        fetch('/api/logout').then(res => {dispatch(logout())});
+        dispatch(deauthenticationBegin());
+        fetch('/api/logout/')
+            .then(res => {
+                if (!res.ok) {
+                    throw res;
+                }
+                return res.text();
+            })
+            .then(res => {
+                dispatch(deauthenticationSuccess(res));
+                return res;
+            })
+            .catch(res => res.text().then(err => dispatch(deauthenticationFailure(err))));
     };
 }

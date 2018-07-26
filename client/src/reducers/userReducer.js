@@ -1,4 +1,4 @@
-import { AUTHENTICATION_BEGIN, AUTHENTICATION_FAILURE, AUTHENTICATION_SUCCESS, LOGOUT } from 'actions/userActions.js';
+import { AUTHENTICATION_BEGIN, AUTHENTICATION_FAILURE, AUTHENTICATION_SUCCESS, DEAUTHENTICATION_BEGIN, DEAUTHENTICATION_FAILURE, DEAUTHENTICATION_SUCCESS } from 'actions/userActions.js';
 
 const initialState = {
     username: getFromStorage('username'),
@@ -56,12 +56,29 @@ export default (state = initialState, action) => {
                 authenticated: false,
                 error: action.payload
             };
-        
-        case LOGOUT:
+
+        case DEAUTHENTICATION_BEGIN:
+            return {
+                ...previousState,
+                authenticating: true
+            };
+        case DEAUTHENTICATION_SUCCESS:
             clearStorage();
             return {
-                ...initialState
+                ...previousState,
+                authenticating: false,
+                authenticated: false,
+                username: null,
+                role: null,
+                error: null
             };
+        case DEAUTHENTICATION_FAILURE:
+            return {
+                ...previousState,
+                authenticating: false,
+                error: action.payload
+            };
+        
         default:
             return previousState;
     }
