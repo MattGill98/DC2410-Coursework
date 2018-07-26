@@ -78,7 +78,7 @@ export function deleteEvent(eventID) {
                 dispatch(deleteEventSuccess());
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(fetchEventFailure(err))));
+            .catch(res => res.json().then(err => dispatch(deleteEventFailure(err))));
     };
 }
 

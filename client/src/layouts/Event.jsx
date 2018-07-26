@@ -4,7 +4,7 @@ import reactLogo from 'images/logo.svg';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from "react-router-dom";
-import { Button, Card, CardBody, CardTitle, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Alert } from 'reactstrap';
 import titlecase from 'title-case';
 
 const mapStateToProps = state => {
@@ -16,6 +16,17 @@ const mapStateToProps = state => {
         deleted: state.Event.deleted,
     };
 };
+
+function ErrorMessage(props) {
+    if (!props.error) {
+        return null;
+    }
+    return (
+        <Alert id="errorAlert" color="danger">
+            You must be the owner of this event to delete it!
+        </Alert>
+    );
+}
 
 class Event extends React.Component {
 
@@ -52,10 +63,6 @@ class Event extends React.Component {
     render() {
         const { eventData, loading, error, deleted, deleting } = this.props;
 
-        if (error) {
-            return <div>Error!</div>
-        }
-
         if (loading) {
             return <div>Loading...</div>
         }
@@ -69,12 +76,19 @@ class Event extends React.Component {
             return <div>Deleting...</div>
         }
 
+        if (error && this.state.modal && !document.getElementById('errorAlert')) {
+            this.setState({
+                modal: false
+            });
+        }
+
         return (
             <div>
+                <ErrorMessage error={error} />
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
                 <Button outline color="danger" onClick={this.toggleModal}>Delete Event</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Delete Event</ModalHeader>
+                <Modal isOpen={this.state.modal}>
+                    <ModalHeader>Delete Event</ModalHeader>
                     <ModalBody>Are you sure?</ModalBody>
                     <ModalFooter>
                         <Button color="danger" onClick={this.startDelete}>I'm sure</Button>{' '}
