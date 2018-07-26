@@ -64,6 +64,9 @@ module.exports = function (mongoose) {
         userObj.username = username;
         userObj.password = password;
         userObj.name = req.body.name;
+        if (req.body.role && req.body.role != "") {
+            userObj.role = req.body.role;
+        }
         const user = new User(userObj);
         User.findOne({ username: user.username }, (err, res) => {
             if (err) return done(err);

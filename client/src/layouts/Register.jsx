@@ -71,6 +71,14 @@ class Login extends React.Component {
                                 <Label for="name">Name</Label>
                                 <Input type="text" name="name" />
                             </FormGroup>
+                            <FormGroup>
+                                <Label for="role">Role</Label>
+                                <Input type="select" name="role">
+                                    <option></option>
+                                    <option>student</option>
+                                    <option>organiser</option>
+                                </Input>
+                            </FormGroup>
                             <Button outline color="success" type="submit">Register</Button>
                         </Form>
                     </Col>
