@@ -2,7 +2,7 @@ import { login } from 'actions/userActions.js';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
-import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Form, FormGroup, Input, Label, Row, Alert} from 'reactstrap';
 
 const mapStateToProps = state => {
     return {
@@ -11,6 +11,17 @@ const mapStateToProps = state => {
         error: state.User.error
     };
 };
+
+function LoginError(props) {
+    if (!props.error) {
+        return null;
+    }
+    return (
+        <Alert id="errorAlert" color="danger">
+            {props.error.error}
+        </Alert>
+    );
+}
 
 class Login extends React.Component {
 
@@ -33,10 +44,6 @@ class Login extends React.Component {
     render() {
         const { error, authenticating, authenticated } = this.props;
 
-        if (error) {
-            return <div>Error!</div>
-        }
-
         if (authenticated === true) {
             return <Redirect to='/events' />
         }
@@ -48,6 +55,7 @@ class Login extends React.Component {
         return (
             <div>
                 <Button outline color="secondary" onClick={this.props.history.goBack}>Back</Button>
+                <LoginError error={error} />
                 <Row>
                     <Col sm="4">
                         <Form onSubmit={this.startLogin} id="loginForm">
