@@ -77,7 +77,10 @@ module.exports = function (mongoose) {
             venue: {
                 type: String,
                 required: [true, "An event requires a venue."]
-            }
+            },
+            interested: [{
+                type: String
+            }]
         },
         {
             strict: "throw",
@@ -136,7 +139,7 @@ module.exports = function (mongoose) {
             }, callback);
         },
         update: function (id, updatedMessage, callback) {
-            Event.findOneAndUpdate({_id: id}, updatedMessage, callback);
+            Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);
         },
         delete: function (id, callback) {
             Event.remove({ _id: id }, (err, res) => {
