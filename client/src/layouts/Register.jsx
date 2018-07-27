@@ -72,10 +72,6 @@ class Login extends React.Component {
                                 <Input type="password" name="password" required />
                             </FormGroup>
                             <FormGroup>
-                                <Label for="name">Name</Label>
-                                <Input type="text" name="name" />
-                            </FormGroup>
-                            <FormGroup>
                                 <Label for="role">Role</Label>
                                 <Input type="select" name="role">
                                     <option></option>

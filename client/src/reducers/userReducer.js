@@ -45,13 +45,13 @@ export default (state = initialState, action) => {
                 authenticating: true
             };
         case AUTHENTICATION_SUCCESS:
-            persist('username', action.payload.name);
+            persist('username', action.payload.username);
             persist('role', action.payload.role);
             return {
                 ...previousState,
                 authenticating: false,
                 authenticated: true,
-                username: action.payload.name,
+                username: action.payload.username,
                 role: action.payload.role
             };
         case AUTHENTICATION_FAILURE:

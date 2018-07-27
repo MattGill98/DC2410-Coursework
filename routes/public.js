@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const securityConf = require('../config/security.js');
 
-module.exports = function (Event, User) {
+module.exports = function (Event) {
     // Fetch all events
     router.get('/events', (request, response) => {
         if (request.query.filter == null) {
@@ -62,22 +62,6 @@ module.exports = function (Event, User) {
             response.send(res);
         });
     });
-
-    // Get all users
-    router.get('/users', (request, response) => {
-        User.readAll((err, res) => {
-            if (err) return response.status(500).send(err);
-            response.send(res);
-        });
-    })
-
-    // Delete all users
-    router.delete('/users', (request, response) => {
-        User.deleteAll((err, res) => {
-            if (err) return response.status(500).send(err);
-            response.send(res);
-        });
-    })
 
     // Register
     router.post('/register', (req, res, next) => {

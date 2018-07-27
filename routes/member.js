@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-module.exports = function (Event, User) {
+module.exports = function (Event) {
 
     router.delete('/event/:id', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {

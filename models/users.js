@@ -19,10 +19,6 @@ module.exports = function (mongoose) {
                 type: String,
                 required: [true, 'A user needs a password.']
             },
-            name: {
-                type: String,
-                required: false
-            },
             role: {
                 type: String,
                 enum: ['member', 'student', 'organiser'],
@@ -50,7 +46,7 @@ module.exports = function (mongoose) {
                 if (!isMatch) return done(null, false, { error: 'Incorrect password.' });
 
                 done(null, {
-                    name: user.name,
+                    username: user.username,
                     token: jwt.sign(user._id.toString(), securityConf.jwtSecret),
                     role: user.role
                 });
@@ -63,7 +59,6 @@ module.exports = function (mongoose) {
         var userObj = {};
         userObj.username = username;
         userObj.password = password;
-        userObj.name = req.body.name;
         if (req.body.role && req.body.role != "") {
             userObj.role = req.body.role;
         }
@@ -77,7 +72,7 @@ module.exports = function (mongoose) {
                 if (err) throw err;
 
                 done(null, {
-                    name: user.name,
+                    username: user.username,
                     token: jwt.sign(user._id.toString(), securityConf.jwtSecret),
                     role: user.role
                 });
@@ -101,10 +96,6 @@ module.exports = function (mongoose) {
         const user = this;
         const SALT_FACTOR = 5;
         if (!user.isModified('password')) return next();
-
-        if (user.name == null || user.name === "") {
-            user.name = user.username;
-        }
 
         bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
             if (err) return next(err);

@@ -37,7 +37,23 @@ const User = require('./models/users.js')(mongoose);
 const Event = require('./models/events.js')(mongoose);
 
 // Add routes
-app.use('/api', require('./routes/public.js')(Event, User));
-app.use('/api', require('./routes/member.js')(Event, User));
+app.use('/api', require('./routes/public.js')(Event));
+app.use('/api', require('./routes/member.js')(Event));
 
 module.exports = app;
+
+// Get all users
+app.get('/api/users', (request, response) => {
+    User.readAll((err, res) => {
+        if (err) return response.status(500).send(err);
+        response.send(res);
+    });
+})
+
+// Delete all users
+app.delete('/api/users', (request, response) => {
+    User.deleteAll((err, res) => {
+        if (err) return response.status(500).send(err);
+        response.send(res);
+    });
+})
