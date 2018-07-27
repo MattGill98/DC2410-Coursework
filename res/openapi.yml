@@ -4,7 +4,7 @@ info:
   version: "1.0"
   title: "DC2410 Coursework"
 servers:
-  - url: "http://localhost:9000/api"
+  - url: "http://192.168.150.132:3000/api"
     description: "A locally hosted server."
 paths:
   /events:
@@ -264,7 +264,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
         name:
           type: string
         description:
