@@ -11,6 +11,7 @@ paths:
     get:
       operationId: "getEvents"
       summary: "Fetch all events."
+      description: "A user must be authenticated and have the role of student or organiser to sort or filter results."
       parameters:
         - name: "sort"
           in: query
@@ -40,32 +41,76 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Event"
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Event"
         500:
-          description: "Error fetching events."
+          description: "An internal error occurred."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        401:
+          $ref: "#/components/responses/Unauthenticated"
+        403:
+          $ref: "#/components/responses/Unauthorized"
+      security:
+        - cookieAuth: []
     post:
       operationId: "createEvent"
       summary: "Create a new event."
+      description: "A user must be authenticated to use this method, and have the role of organiser."
       requestBody:
         description: "The event to create."
         required: true
         content:
           multipart/form-data:
             schema:
-                $ref: "#/components/schemas/NewEvent"
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: string
+                  enum: ["sport", "culture", "others"]
+                date:
+                  type: string
+                  format: date
+                picture:
+                  type: string
+                  format: binary
+                organiser:
+                  type: string
+                venue:
+                  type: string
+              required:
+                - name
+                - category
+                - date
+                - organiser
+                - venue
       responses:
         200:
-          description: "A successfully created event."
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Event"
+          $ref: "#/components/responses/SingleEvent"
+        401:
+          $ref: "#/components/responses/Unauthenticated"
+        403:
+          $ref: "#/components/responses/Unauthorized"
+      security:
+        - cookieAuth: []
   /event/{id}:
     get:
       operationId: "getEvent"
       summary: "Get a specific event by ID."
+      description: "A user must be authenticated to use this method, and have the role of student or organiser."
       parameters:
         - name: "id"
           in: path
@@ -74,16 +119,19 @@ paths:
             $ref: '#/components/schemas/Event/properties/id'
       responses:
         200:
-          description: "The requested event."
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Event"
+          $ref: "#/components/responses/SingleEvent"
         404:
-          description: "The event was not found."
-    put:
-      operationId: "updateEvent"
-      summary: "Update an event by ID."
+          $ref: "#/components/responses/Empty"
+        401:
+          $ref: "#/components/responses/Unauthenticated"
+        403:
+          $ref: "#/components/responses/Unauthorized"
+      security:
+        - cookieAuth: []
+    delete:
+      operationId: "deleteEvent"
+      summary: "Delete an event by ID."
+      description: "A user must be authenticated to use this method, and have the role of organiser."
       parameters:
         - name: "id"
           in: path
@@ -92,13 +140,15 @@ paths:
             $ref: '#/components/schemas/Event/properties/id'
       responses:
         200:
-          description: "The updated event."
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Event"
+          $ref: "#/components/responses/Empty"
         404:
-          description: "The event was not found."
+          $ref: "#/components/responses/Empty"
+        401:
+          $ref: "#/components/responses/Unauthenticated"
+        403:
+          $ref: "#/components/responses/Unauthorized"
+      security:
+        - cookieAuth: []
   /event/{id}/picture:
     get:
       operationId: "getPicture"
@@ -118,35 +168,97 @@ paths:
                 type: string
                 format: binary
         404:
-          description: "The event didn't have a picture."
+          $ref: "#/components/responses/Empty"
+  /login:
+    post:
+      operationId: "login"
+      summary: "Login."
+      description: "Login with the provided credentials. A JWT cookie is provided on a successful login."
+      requestBody:
+        description: "The login credentials."
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        200:
+          $ref: "#/components/responses/Authenticated"
+  /logout:
+    get:
+      operationId: "logout"
+      summary: "Logout."
+      description: "Logout, clearing the authentication cookie."
+      responses:
+        200:
+          $ref: "#/components/responses/Empty"
 components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: dc2410
+  responses:
+    Authenticated:
+      description: "Successful login."
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: dc2410=eyJhbGciOifIUzI1NiJ9.NWI1OWJhYsNlOTdlNDr4NTMwY2YyNbQ2.m8GsZzXPXeYYnJuM0Xe7BO66H4FrCiIANuSSACLbjOU; Path=/; HttpOnly
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              token:
+                type: string
+              role:
+                type: string
+    Empty:
+      description: "An empty response."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                type: object
+    SingleEvent:
+      description: "The requested event."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Event"
+    Unauthenticated:
+      description: "The user wasn't logged in."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    Unauthorized:
+      description: "The user has the wrong permissions."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
   schemas:
-    NewEvent:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        category:
-          type: string
-          enum: ["sport", "culture", "others"]
-        date:
-          type: string
-          format: date
-        picture:
-          type: string
-          format: binary
-        organiser:
-          type: string
-        venue:
-          type: string
-      required:
-        - name
-        - category
-        - date
-        - organiser
-        - venue
     Event:
       type: object
       properties:
