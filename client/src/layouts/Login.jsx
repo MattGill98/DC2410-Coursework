@@ -1,4 +1,4 @@
-import { login } from 'actions/userActions.js';
+import { login, resetError } from 'actions/userActions.js';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
@@ -29,6 +29,10 @@ class Login extends React.Component {
         super(props);
 
         this.startLogin = this.startLogin.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.dispatch(resetError());
     }
 
     startLogin(e) {

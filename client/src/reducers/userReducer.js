@@ -1,4 +1,4 @@
-import { AUTHENTICATION_BEGIN, AUTHENTICATION_FAILURE, AUTHENTICATION_SUCCESS, DEAUTHENTICATION_BEGIN, DEAUTHENTICATION_FAILURE, DEAUTHENTICATION_SUCCESS } from 'actions/userActions.js';
+import { RESET_ERROR, AUTHENTICATION_BEGIN, AUTHENTICATION_FAILURE, AUTHENTICATION_SUCCESS, DEAUTHENTICATION_BEGIN, DEAUTHENTICATION_FAILURE, DEAUTHENTICATION_SUCCESS } from 'actions/userActions.js';
 
 const initialState = {
     username: getFromStorage('username'),
@@ -34,6 +34,11 @@ export default (state = initialState, action) => {
     }
 
     switch (action.type) {
+        case RESET_ERROR:
+            return {
+                ...previousState,
+                error: null
+            };
         case AUTHENTICATION_BEGIN:
             return {
                 ...previousState,
