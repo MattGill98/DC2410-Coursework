@@ -35,10 +35,9 @@ mongoose.connect('mongodb://localhost:27017');
 // Create tables
 const User = require('./models/users.js')(mongoose);
 const Event = require('./models/events.js')(mongoose);
-const Picture = require('./models/pictures.js')(mongoose);
 
 // Add routes
-app.use('/api', require('./routes/public.js')(Event, Picture, User));
-app.use('/api', require('./routes/member.js')(Event, Picture, User));
+app.use('/api', require('./routes/public.js')(Event, User));
+app.use('/api', require('./routes/member.js')(Event, User));
 
 module.exports = app;

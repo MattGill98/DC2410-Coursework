@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const securityConf = require('../config/security.js');
 
-module.exports = function (Event, Picture, User) {
+module.exports = function (Event, User) {
     // Fetch all events
     router.get('/events', (request, response) => {
         if (request.query.filter == null) {
@@ -31,28 +31,9 @@ module.exports = function (Event, Picture, User) {
 
     // Create a new event
     router.post('/events', (request, response) => {
-
-        var picturePath = (request.body.picture == null) ? null : request.body.picture.path;
-        request.body.picture = false;
-
-        Event.create(request.body, (err, createdEvent) => {
-            if (err != null) {
-                response.status(500).send(err);
-            } else {
-                if (picturePath != null) {
-                    Picture.create(createdEvent._id.toString(), picturePath, (err, createdPicture) => {
-                        if (err != null) return response.status(500).send(err);
-                        
-                        createdEvent.picture = true;
-                        Event.update(createdEvent._id.toString(), createdEvent, (err, res) => {
-                            if (err) return response.status(500).send(err);
-                            response.send(createdEvent);
-                        });
-                    });
-                } else {
-                    response.send(createdEvent);
-                }
-            }
+        Event.create(request.body, (err, res) => {
+            if (err) return response.status(500).send(err);
+            response.send(res);
         });
     });
 
@@ -60,28 +41,17 @@ module.exports = function (Event, Picture, User) {
     router.get('/event/:id', (request, response) => {
         Event.read(request.params.id, (err, res) => {
             if (err) return response.status(500).send(err);
+            if (!res) return response.status(404).send({message: 'Event not found.'});
             response.send(res);
         });
     });
 
     // Get the picture for an event
     router.get('/event/:id/picture', (request, response) => {
-        Event.read(request.params.id, (err, res) => {
-            if (err != null) {
-                response.status(500).send(err);
-            } else if (res == null) {
-                response.send("No event found.");
-            } else if (res.picture) {
-                Picture.read(request.params.id, (err, res) => {
-                    if (err) {
-                        throw new Error(err);
-                    } else {
-                        res.pipe(response);
-                    }
-                });
-            } else {
-                response.sendStatus(404);
-            }
+        Event.readPicture(request.params.id, (err, res) => {
+            if (err) return response.status(500).send(err);
+            if (!res) return response.status(404).send({message: 'Picture not found.'});
+            res.pipe(response);
         });
     })
 
@@ -91,7 +61,6 @@ module.exports = function (Event, Picture, User) {
             if (err) return response.status(500).send(err);
             response.send(res);
         });
-        Picture.deleteAll();
     });
 
     // Get all users

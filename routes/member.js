@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
-module.exports = function (Event, Picture, User) {
+module.exports = function (Event, User) {
 
     router.delete('/event/:id', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
@@ -11,9 +11,9 @@ module.exports = function (Event, Picture, User) {
 
             Event.delete(request.params.id, (err, res) => {
                 if (err) return response.status(500).send(err);
+                if (!res) return response.status(404).send({error: 'Event didn\'t exist.'});
                 response.send(res);
             });
-            Picture.delete(request.params.id);
         })(request, response, next);
     });
 
