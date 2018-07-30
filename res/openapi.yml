@@ -19,7 +19,7 @@ paths:
           description: "Sort the results."
           schema:
             type: string
-            enum: ["popularity", "date"]
+            enum: ["popularity", "date", "name", "date", "category", "venue", "organiser"]
         - name: "filter"
           in: query
           required: false
@@ -28,7 +28,7 @@ paths:
             type: array
             items:
               type: string
-              enum: ["me", "sport", "culture", "others"]
+              enum: ["me", "subscribed", "sport", "culture", "others"]
         - name: "limit"
           in: query
           required: false

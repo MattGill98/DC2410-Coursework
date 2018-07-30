@@ -1,6 +1,7 @@
 import { login, resetError } from 'actions/userActions.js';
 import ErrorAlert from 'components/ErrorAlert.jsx';
 import React from 'react';
+import ButtonBar from 'components/ButtonBar.jsx';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
@@ -48,7 +49,9 @@ class Login extends React.Component {
 
         return (
             <div>
-                <Button outline color="secondary" onClick={this.props.history.goBack}>Back</Button>
+                <ButtonBar>
+                    <Button outline color="secondary" onClick={this.props.history.goBack}>Back</Button>
+                </ButtonBar>
                 <ErrorAlert error={authenticationError} id="authenticationError" />
                 <Row>
                     <Col sm="4">

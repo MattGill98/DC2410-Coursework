@@ -27,7 +27,7 @@ class App extends Component {
                         <header>
                             <NavBar />
                         </header>
-                        <Container fluid={true}>
+                        <Container fluid={false}>
                             <Switch>
                                 <Route exact path="/event/:id" component={Event} />
                                 <Route exact path="/events/new" component={NewEvent} />

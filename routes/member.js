@@ -4,19 +4,6 @@ const passport = require('passport');
 
 module.exports = function (Event) {
 
-    router.delete('/event/:id', (request, response, next) => {
-        passport.authenticate('verify', { session: false }, (err, user, info) => {
-            if (err) return response.status(500).send({message: 'Error authenticating.'});
-            if (!user) return response.status(500).send({message: 'No user found.'});
-
-            Event.delete(request.params.id, (err, res) => {
-                if (err) return response.status(500).send({message: 'Error deleting event.'});
-                if (!res) return response.status(404).send({message: 'Event didn\'t exist.'});
-                response.send(res);
-            });
-        })(request, response, next);
-    });
-
     router.put('/event/:id/interest', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});

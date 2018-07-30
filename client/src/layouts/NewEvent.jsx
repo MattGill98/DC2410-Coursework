@@ -32,7 +32,7 @@ class NewEvent extends React.Component {
     render() {
         const { creationError, created, creating } = this.props;
 
-        const creationErrors = (creationError)? creationError : {};
+        const nonNullError = (creationError)? creationError : {};
 
         if (created === true) {
             return <Redirect to='/events' />
@@ -44,67 +44,67 @@ class NewEvent extends React.Component {
 
         return (
             <div>
-                <ErrorAlert message="Error creating event." visible={creationError} />
+                <ErrorAlert error={nonNullError.message} id="creationErrorAlert" />
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
                 <Row>
                     <Col sm="4">
                         <Form onSubmit={this.startCreate} id="eventForm">
                             <FormGroup>
                                 <Label for="name">Event Name</Label>
-                                <Input invalid={creationErrors.name != null} type="text" name="name" required />
+                                <Input invalid={nonNullError.name} type="text" name="name" required />
                                 <FormFeedback>{
-                                    creationErrors.name == null ?
+                                    nonNullError.name == null ?
                                         "Invalid name" :
-                                        creationErrors.name.message}
+                                        nonNullError.name.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="category">Event Category</Label>
-                                <Input invalid={creationErrors.category != null} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
+                                <Input invalid={nonNullError.category} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
                                     <option>sport</option>
                                     <option>culture</option>
                                     <option>other</option>
                                 </Input>
                                 <FormFeedback>{
-                                    creationErrors.category == null ?
+                                    nonNullError.category == null ?
                                         "Invalid category" :
-                                        creationErrors.category.message}
+                                        nonNullError.category.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="description">Description</Label>
-                                <Input invalid={creationErrors.description != null} type="text" name="description" />
+                                <Input invalid={nonNullError.description} type="text" name="description" />
                                 <FormFeedback>{
-                                    creationErrors.description == null ?
+                                    nonNullError.description == null ?
                                         "Invalid description" :
-                                        creationErrors.description.message}
+                                        nonNullError.description.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="date">Date</Label>
-                                <Input invalid={creationErrors.date != null} type="date" name="date" required />
+                                <Input invalid={nonNullError.date} type="date" name="date" required />
                                 <FormFeedback>{
-                                    creationErrors.date == null ?
+                                    nonNullError.date == null ?
                                         "Invalid date" :
-                                        creationErrors.date.message}
+                                        nonNullError.date.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="venue">Venue</Label>
-                                <Input invalid={creationErrors.venue != null} type="text" name="venue" required />
+                                <Input invalid={nonNullError.venue} type="text" name="venue" required />
                                 <FormFeedback>{
-                                    creationErrors.venue == null ?
+                                    nonNullError.venue == null ?
                                         "Invalid venue" :
-                                        creationErrors.venue.message}
+                                        nonNullError.venue.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="picture">Picture</Label>
-                                <Input invalid={creationErrors.picture != null} type="file" name="picture" />
+                                <Input invalid={nonNullError.picture} type="file" name="picture" />
                                 <FormFeedback>{
-                                    creationErrors.picture == null ?
+                                    nonNullError.picture == null ?
                                         "Invalid picture" :
-                                        creationErrors.picture.message}
+                                        nonNullError.picture.message}
                                 </FormFeedback>
                             </FormGroup>
                             <input type="hidden" name="organiser" value="Matt Gill" />

@@ -29,15 +29,6 @@ module.exports = function (Event) {
         });
     });
 
-    // Create a new event
-    router.post('/events', (request, response) => {
-        Event.create(request.body, (err, res) => {
-            if (err) return response.status(500).send(err);
-            if (!res) return response.status(500).send({message: 'Error creating event.'});
-            response.send(res);
-        });
-    });
-
     // Get a specific event
     router.get('/event/:id', (request, response) => {
         Event.read(request.params.id, (err, res) => {

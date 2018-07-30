@@ -130,7 +130,7 @@ export function createEvent(data) {
                 dispatch(createEventSuccess());
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(createEventFailure(err.errors))));
+            .catch(res => res.json().then(err => dispatch(createEventFailure(err))));
     };
 }
 

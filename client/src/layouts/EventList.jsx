@@ -2,6 +2,7 @@ import { fetchEvents } from 'actions/eventListActions.js';
 import EventCard from 'components/EventCard.jsx';
 import React from 'react';
 import { connect } from 'react-redux';
+import ButtonBar from 'components/ButtonBar.jsx';
 import { Link } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
 
@@ -32,11 +33,13 @@ class EventList extends React.Component {
 
         return (
             <div>
-                <Button outline color="success" tag={Link} to="/events/new">New Event</Button>
+                <ButtonBar>
+                    <Button outline color="success" tag={Link} to="/events/new">New Event</Button>
+                </ButtonBar>
                 <Row>
                     {
                         events.map((event) =>
-                            <Col key={event._id} sm="3">
+                            <Col key={event._id} sm="6" lg="4">
                                 <EventCard event={event} />
                             </Col>
                         )
