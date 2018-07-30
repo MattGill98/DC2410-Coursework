@@ -68,7 +68,7 @@ module.exports = function (Event) {
     router.post('/register', (req, res, next) => {
         passport.authenticate('register', { session: false }, (err, user, info) => {
             if (err) return res.status(500).send({message: 'Error registering user.'});
-            if (!user) return res.status(500).send({message: 'User already exists.'});
+            if (!user) return res.status(500).send({message: info.message});
             return res
                 .cookie(securityConf.cookieName, user.token, securityConf.cookieOptions)
                 .send(user);
@@ -79,7 +79,7 @@ module.exports = function (Event) {
     router.post('/login', (req, res, next) => {
         passport.authenticate('login', { session: false }, (err, user, info) => {
             if (err) return res.status(500).send({message: 'Error authenticating.'});
-            if (!user) return res.status(500).send({message: 'No user found.'});
+            if (!user) return res.status(500).send({message: info.message});
             return res
                 .cookie(securityConf.cookieName, user.token, securityConf.cookieOptions)
                 .send(user);

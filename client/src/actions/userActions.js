@@ -57,7 +57,7 @@ export function login(data) {
                 dispatch(authenticationSuccess(res));
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(authenticationFailure(err))));
+            .catch(res => res.json().then(err => dispatch(authenticationFailure(err.message))));
     };
 }
 
@@ -83,7 +83,7 @@ export function register(data) {
                 dispatch(authenticationSuccess(res));
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(authenticationFailure(err))));
+            .catch(res => res.json().then(err => dispatch(authenticationFailure(err.message))));
     };
 }
 

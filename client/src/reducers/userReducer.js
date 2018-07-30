@@ -5,7 +5,7 @@ const initialState = {
     role: getFromStorage('role'),
     authenticating: false,
     authenticated: getFromStorage('username') != null,
-    error: null
+    authenticationError: null
 };
 
 export default (state = initialState, action) => {
@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
         case RESET_ERROR:
             return {
                 ...previousState,
-                error: null
+                authenticationError: null
             };
         case AUTHENTICATION_BEGIN:
             return {
@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
                 ...previousState,
                 authenticating: false,
                 authenticated: false,
-                error: action.payload
+                authenticationError: action.payload
             };
 
         case DEAUTHENTICATION_BEGIN:
@@ -75,13 +75,13 @@ export default (state = initialState, action) => {
                 authenticated: false,
                 username: null,
                 role: null,
-                error: null
+                authenticationError: null
             };
         case DEAUTHENTICATION_FAILURE:
             return {
                 ...previousState,
                 authenticating: false,
-                error: action.payload
+                authenticationError: action.payload
             };
         
         default:

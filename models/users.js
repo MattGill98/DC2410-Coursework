@@ -39,11 +39,11 @@ module.exports = function (mongoose) {
         User.findOne({ username: username }, (err, user) => {
             if (err) return done(err);
 
-            if (!user) return done(null, false, { error: 'Given username not found.' });
+            if (!user) return done(null, false, { message: 'Given username not found.' });
 
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) return done(err);
-                if (!isMatch) return done(null, false, { error: 'Incorrect password.' });
+                if (!isMatch) return done(null, false, { message: 'Incorrect password.' });
 
                 done(null, {
                     username: user.username,
@@ -66,7 +66,7 @@ module.exports = function (mongoose) {
         User.findOne({ username: user.username }, (err, res) => {
             if (err) return done(err);
 
-            if (res) return done(null, false, { error: 'Username taken.' });
+            if (res) return done(null, false, { message: 'Username taken.' });
 
             user.save(err => {
                 if (err) throw err;
