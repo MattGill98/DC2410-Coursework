@@ -33,6 +33,7 @@ module.exports = function (Event) {
     router.post('/events', (request, response) => {
         Event.create(request.body, (err, res) => {
             if (err) return response.status(500).send(err);
+            if (!res) return response.status(500).send({message: 'Error creating event.'});
             response.send(res);
         });
     });

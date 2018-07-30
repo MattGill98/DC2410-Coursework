@@ -6,7 +6,6 @@ module.exports = function (Event) {
 
     router.delete('/event/:id', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
-            return response.status(500).send({message: 'Failed to delete event.'});
             if (err) return response.status(500).send({message: 'Error authenticating.'});
             if (!user) return response.status(500).send({message: 'No user found.'});
 

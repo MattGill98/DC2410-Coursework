@@ -3,12 +3,13 @@ import { createEvent } from 'actions/eventActions.js';
 import { Link, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap';
+import ErrorAlert from 'components/ErrorAlert.jsx';
 
 const mapStateToProps = state => {
     return {
-        error: state.Event.error,
         creating: state.Event.creating,
         created: state.Event.created,
+        creationError: state.Event.creationError
     };
 };
 
@@ -29,20 +30,21 @@ class NewEvent extends React.Component {
     }
 
     render() {
-        const { error, created, creating } = this.props;
+        const { creationError, created, creating } = this.props;
 
-        const creationErrors = (error)? error : {};
+        const creationErrors = (creationError)? creationError : {};
 
         if (created === true) {
             return <Redirect to='/events' />
         }
 
         if (creating === true) {
-            return <div>Deleting...</div>
+            return <div>Creating event...</div>
         }
 
         return (
             <div>
+                <ErrorAlert message="Error creating event." visible={creationError} />
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
                 <Row>
                     <Col sm="4">

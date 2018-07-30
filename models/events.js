@@ -113,6 +113,8 @@ module.exports = function (mongoose) {
                             callback(null, updatedEvent);
                         });
                     });
+                } else {
+                    return callback(null, from);
                 }
             });
         },
@@ -144,13 +146,19 @@ module.exports = function (mongoose) {
         delete: function (id, callback) {
             Event.remove({ _id: id }, (err, res) => {
                 if (err) return callback(err);
-                deletePicture(id, callback);
+                deletePicture(id, (err, store) => {
+                    if (err) return callback(err);
+                    callback(null, res);
+                });
             });
         },
         deleteAll: function (callback) {
             Event.remove({}, (err, res) => {
                 if (err) return callback(err);
-                deleteAllPictures(callback);
+                deleteAllPictures((err, store) => {
+                    if (err) return callback(err);
+                    callback(null, res);
+                });
             });
         }
     };

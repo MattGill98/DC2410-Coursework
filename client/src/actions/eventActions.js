@@ -39,13 +39,13 @@ export const deleteEventFailure = (error) => ({
 });
 
 export const createEventBegin = () => ({
-    type: SUBSCRIBE_BEGIN
+    type: CREATE_EVENT_BEGIN
 });
 export const createEventSuccess = () => ({
-    type: SUBSCRIBE_SUCCESS
+    type: CREATE_EVENT_SUCCESS
 });
 export const createEventFailure = (error) => ({
-    type: SUBSCRIBE_FAILURE,
+    type: CREATE_EVENT_FAILURE,
     payload: error
 });
 
@@ -130,7 +130,7 @@ export function createEvent(data) {
                 dispatch(createEventSuccess());
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(createEventFailure(err.message))));
+            .catch(res => res.json().then(err => dispatch(createEventFailure(err.errors))));
     };
 }
 

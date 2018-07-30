@@ -1,13 +1,14 @@
-import { deleteEvent, fetchEvent, fetchEventBegin } from 'actions/eventActions.js';
+import { subscribe, unsubscribe } from 'actions/eventActions';
+import { deleteEvent, fetchEvent } from 'actions/eventActions.js';
+import ErrorAlert from 'components/ErrorAlert.jsx';
+import LoadingButton from 'components/LoadingButton.jsx';
 import dateFormat from 'dateformat';
 import reactLogo from 'images/logo.svg';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from "react-router-dom";
-import { Button, Card, CardBody, CardTitle, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Alert } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import titlecase from 'title-case';
-import LoadingButton from 'components/LoadingButton.jsx';
-import { subscribe, unsubscribe } from 'actions/eventActions';
 
 const mapStateToProps = state => {
     return {
@@ -25,17 +26,6 @@ const mapStateToProps = state => {
         subscriptionError: state.Event.subscriptionError
     };
 };
-
-function ErrorMessage(props) {
-    if (!props.error) {
-        return null;
-    }
-    return (
-        <Alert id={props.id} color="danger">
-            {props.error}
-        </Alert>
-    );
-}
 
 class Event extends React.Component {
 
@@ -87,9 +77,9 @@ class Event extends React.Component {
 
         return (
             <div>
-                <ErrorMessage error={fetchError} id="fetchErrorAlert" />
-                <ErrorMessage error={deletionError} id="deletionErrorAlert" />
-                <ErrorMessage error={subscriptionError} id="subscriptionErrorAlert" />
+                <ErrorAlert error={fetchError} id="fetchErrorAlert" />
+                <ErrorAlert error={deletionError} id="deletionErrorAlert" />
+                <ErrorAlert error={subscriptionError} id="subscriptionErrorAlert" />
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
                 <Button outline color="danger" onClick={this.toggleModal}>Delete Event</Button>
                 <Modal isOpen={this.state.modal}>

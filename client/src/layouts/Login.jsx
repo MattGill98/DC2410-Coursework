@@ -1,27 +1,17 @@
 import { login, resetError } from 'actions/userActions.js';
+import ErrorAlert from 'components/ErrorAlert.jsx';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
-import { Button, Col, Form, FormGroup, Input, Label, Row, Alert} from 'reactstrap';
+import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 
 const mapStateToProps = state => {
     return {
         authenticating: state.User.authenticating,
         authenticated: state.User.authenticated,
-        error: state.User.error
+        authenticationError: state.User.authenticationError
     };
 };
-
-function LoginError(props) {
-    if (!props.error) {
-        return null;
-    }
-    return (
-        <Alert id="errorAlert" color="danger">
-            {props.error.error}
-        </Alert>
-    );
-}
 
 class Login extends React.Component {
 
@@ -46,7 +36,7 @@ class Login extends React.Component {
     }
 
     render() {
-        const { error, authenticating, authenticated } = this.props;
+        const { authenticationError, authenticating, authenticated } = this.props;
 
         if (authenticated === true) {
             return <Redirect to='/events' />
@@ -59,7 +49,7 @@ class Login extends React.Component {
         return (
             <div>
                 <Button outline color="secondary" onClick={this.props.history.goBack}>Back</Button>
-                <LoginError error={error} />
+                <ErrorAlert error={authenticationError} id="authenticationError" />
                 <Row>
                     <Col sm="4">
                         <Form onSubmit={this.startLogin} id="loginForm">

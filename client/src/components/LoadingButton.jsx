@@ -3,9 +3,7 @@ import { Button } from 'reactstrap';
 
 const LoadingButtonText = ({loading, loadingText, text}) => {
     if (loading) {
-        return (
-            loadingText
-        );
+        return loadingText;
     }
     return text;
 };
