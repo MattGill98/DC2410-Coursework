@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ButtonBar from 'components/ButtonBar.jsx';
 import { Link } from 'react-router-dom';
-import { Button, Col, Row } from 'reactstrap';
+import { Button, ButtonGroup, ButtonToolbar, Col, Row } from 'reactstrap';
 
 const mapStateToProps = state => {
     return {
@@ -32,10 +32,23 @@ class EventList extends React.Component {
         }
 
         return (
-            <div>
+            <div style={{textAlign: "center"}}>
                 <ButtonBar>
                     <Button outline color="success" tag={Link} to="/events/new">New Event</Button>
                 </ButtonBar>
+
+                <span class="badge badge-pill badge-info">Sort</span>
+                <ButtonToolbar className="mb-4">
+                    <ButtonGroup style={{margin: "auto"}}>
+                        <Button outline color="secondary">Popularity</Button>
+                        <Button outline color="secondary">Name</Button>
+                        <Button outline color="secondary">Date</Button>
+                        <Button outline color="secondary">Category</Button>
+                        <Button outline color="secondary">Venue</Button>
+                        <Button outline color="secondary">Organiser</Button>
+                    </ButtonGroup>
+                </ButtonToolbar>
+
                 <Row>
                     {
                         events.map((event) =>
