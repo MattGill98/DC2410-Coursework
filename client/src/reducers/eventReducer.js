@@ -1,13 +1,22 @@
-import { DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, CREATE_EVENT_BEGIN, CREATE_EVENT_FAILURE, CREATE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS } from 'actions/eventActions.js';
+import { CREATE_EVENT_BEGIN, CREATE_EVENT_FAILURE, CREATE_EVENT_SUCCESS, DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS, SUBSCRIBE_BEGIN, SUBSCRIBE_FAILURE, SUBSCRIBE_SUCCESS, UNSUBSCRIBE_SUCCESS } from 'actions/eventActions.js';
 
 const initialState = {
     eventData: {},
-    loading: false,
-    error: null,
+
+    fetching: false,
+    fetchError: null,
+
     deleting: false,
     deleted: false,
+    deletionError: null,
+
     creating: false,
-    created: false
+    created: false,
+    creationError: null,
+
+    subscribing: false,
+    subscribed: false,
+    subscriptionError: null
 };
 
 export default (state = initialState, action) => {
@@ -15,19 +24,19 @@ export default (state = initialState, action) => {
         case FETCH_EVENT_BEGIN:
             return {
                 ...initialState,
-                loading: true
+                fetching: true
             };
         case FETCH_EVENT_SUCCESS:
             return {
                 ...state,
-                loading: false,
+                fetching: false,
                 eventData: action.payload
             };
         case FETCH_EVENT_FAILURE:
             return {
                 ...state,
-                loading: false,
-                error: action.payload,
+                fetching: false,
+                fetchError: action.payload,
                 eventData: {}
             };
         
@@ -36,20 +45,21 @@ export default (state = initialState, action) => {
                 ...state,
                 deleting: true,
                 deleted: false,
-                error: null
+                deletionError: null
             };
         case DELETE_EVENT_SUCCESS:
             return {
                 ...state,
                 deleting: false,
-                deleted: true
+                deleted: true,
+                deletionError: null
             };
         case DELETE_EVENT_FAILURE:
             return {
                 ...state,
                 deleting: false,
                 deleted: false,
-                error: action.payload
+                deletionError: action.payload
             };
 
         case CREATE_EVENT_BEGIN:
@@ -57,20 +67,58 @@ export default (state = initialState, action) => {
                 ...state,
                 creating: true,
                 created: false,
-                error: null
+                creationError: null
             };
         case CREATE_EVENT_SUCCESS:
             return {
                 ...state,
                 creating: false,
-                created: true
+                created: true,
+                creationError: null
             };
         case CREATE_EVENT_FAILURE:
             return {
                 ...state,
                 creating: false,
                 created: false,
-                error: action.payload
+                creationError: action.payload
+            };
+
+        case SUBSCRIBE_BEGIN:
+            return {
+                ...state,
+                subscribing: true,
+                subscribed: false,
+                subscriptionError: null
+            };
+        case SUBSCRIBE_SUCCESS:
+            return {
+                ...state,
+                subscribing: false,
+                subscribed: true,
+                subscriptionError: null,
+                eventData: {
+                    ...state.eventData,
+                    interested: action.payload
+                }
+            };
+        case UNSUBSCRIBE_SUCCESS:
+            return {
+                ...state,
+                subscribing: false,
+                subscribed: false,
+                subscriptionError: null,
+                eventData: {
+                    ...state.eventData,
+                    interested: action.payload
+                }
+            };
+        case SUBSCRIBE_FAILURE:
+            return {
+                ...state,
+                subscribing: false,
+                subscribed: false,
+                subscriptionError: action.payload
             };
         default:
             return state;

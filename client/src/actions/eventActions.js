@@ -10,6 +10,11 @@ export const CREATE_EVENT_BEGIN = 'CREATE_EVENT_BEGIN';
 export const CREATE_EVENT_SUCCESS = 'CREATE_EVENT_SUCCESS';
 export const CREATE_EVENT_FAILURE = 'CREATE_EVENT_FAILURE';
 
+export const SUBSCRIBE_BEGIN = 'SUBSCRIBE_BEGIN';
+export const SUBSCRIBE_SUCCESS = 'SUBSCRIBE_SUCCESS';
+export const UNSUBSCRIBE_SUCCESS = 'UNSUBSCRIBE_SUCCESS';
+export const SUBSCRIBE_FAILURE = 'SUBSCRIBE_FAILURE';
+
 export const fetchEventBegin = () => ({
     type: FETCH_EVENT_BEGIN
 });
@@ -34,31 +39,52 @@ export const deleteEventFailure = (error) => ({
 });
 
 export const createEventBegin = () => ({
-    type: CREATE_EVENT_BEGIN
+    type: SUBSCRIBE_BEGIN
 });
 export const createEventSuccess = () => ({
-    type: CREATE_EVENT_SUCCESS
+    type: SUBSCRIBE_SUCCESS
 });
 export const createEventFailure = (error) => ({
-    type: CREATE_EVENT_FAILURE,
-    payload: error.errors
+    type: SUBSCRIBE_FAILURE,
+    payload: error
+});
+
+export const subscribeBegin = () => ({
+    type: SUBSCRIBE_BEGIN
+});
+export const subscribeSuccess = (data) => ({
+    type: SUBSCRIBE_SUCCESS,
+    payload: data
+});
+export const unsubscribeSuccess = (data) => ({
+    type: UNSUBSCRIBE_SUCCESS,
+    payload: data
+});
+export const subscribeFailure = (error) => ({
+    type: SUBSCRIBE_FAILURE,
+    payload: error
 });
 
 export function fetchEvent(eventID) {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(fetchEventBegin());
         return fetch('/api/event/' + eventID)
             .then(res => {
                 if (!res.ok) {
-                    throw new Error(res.statusText);
+                    throw res;
                 }
                 return res.json();
             })
             .then(res => {
                 dispatch(fetchEventSuccess(res));
+                if (getState().User.username) {
+                    if (res.interested.includes(getState().User.username)) {
+                        dispatch(subscribeSuccess(res.interested));
+                    }
+                }
                 return res;
             })
-            .catch(err => dispatch(fetchEventFailure(err)));
+            .catch(res => res.json().then(err => dispatch(fetchEventFailure(err.message))));
     };
 }
 
@@ -78,7 +104,7 @@ export function deleteEvent(eventID) {
                 dispatch(deleteEventSuccess());
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(deleteEventFailure(err))));
+            .catch(res => res.json().then(err => dispatch(deleteEventFailure(err.message))));
     };
 }
 
@@ -104,6 +130,46 @@ export function createEvent(data) {
                 dispatch(createEventSuccess());
                 return res;
             })
-            .catch(res => res.json().then(err => dispatch(createEventFailure(err))));
+            .catch(res => res.json().then(err => dispatch(createEventFailure(err.message))));
+    };
+}
+
+export function subscribe(eventID) {
+    return dispatch => {
+        dispatch(subscribeBegin());
+        fetch('/api/event/' + eventID + '/interest', {
+            method: 'put'
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw res;
+                }
+                return res;
+            })
+            .then(res => {
+                dispatch(subscribeSuccess());
+                return res;
+            })
+            .catch(res => res.json().then(err => dispatch(subscribeFailure(err.message))));
+    };
+}
+
+export function unsubscribe(eventID) {
+    return dispatch => {
+        dispatch(subscribeBegin());
+        fetch('/api/event/' + eventID + '/interest', {
+            method: 'delete'
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw res;
+                }
+                return res;
+            })
+            .then(res => {
+                dispatch(unsubscribeSuccess());
+                return res;
+            })
+            .catch(res => res.json().then(err => dispatch(subscribeFailure(err.message))));
     };
 }

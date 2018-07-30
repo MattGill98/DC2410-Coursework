@@ -1,3 +1,5 @@
+import { fetchEventBegin } from "actions/eventActions";
+
 export const FETCH_EVENTS_BEGIN = 'FETCH_EVENTS_BEGIN';
 export const FETCH_EVENTS_SUCCESS = 'FETCH_EVENTS_SUCCESS';
 export const FETCH_EVENTS_FAILURE = 'FETCH_EVENTS_FAILURE';
@@ -17,6 +19,8 @@ export const fetchEventsFailure = (error) => ({
 export function fetchEvents() {
     return dispatch => {
         dispatch(fetchEventsBegin());
+        // Reset the single event data when the page begins to load
+        dispatch(fetchEventBegin());
         return fetch('/api/events')
             .then(res => {
                 if (!res.ok) {
