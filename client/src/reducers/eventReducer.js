@@ -88,7 +88,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 subscribing: true,
-                subscribed: false,
                 subscriptionError: null
             };
         case SUBSCRIBE_SUCCESS:
@@ -117,7 +116,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 subscribing: false,
-                subscribed: false,
                 subscriptionError: action.payload
             };
         default:
