@@ -139,7 +139,7 @@ module.exports = function (mongoose) {
                 if (filterString.includes('culture')) conditions.category = 'culture';
                 if (filterString.includes('others')) conditions.category = 'others';
                 if (filterString.includes('mine')) conditions.organiser = username;
-                if (filterString.includes('subscribed')) conditions.subscribed = username;
+                if (filterString.includes('subscribed')) conditions.interested = username;
             }
 
             // Find the sort order
@@ -155,7 +155,7 @@ module.exports = function (mongoose) {
             if (sortString === 'venue') sort.venue = sortOrderValue;
             if (sortString === 'organiser') sort.organiser = sortOrderValue;
 
-            Event.find(conditions, [], {'sort': sort, 'skip': offset, 'limit': limit}, callback);
+            Event.find(conditions, [], {'sort': sort, 'skip': Number(offset), 'limit': Number(offset)}, callback);
         },
         update: function (id, updatedMessage, callback) {
             Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);

@@ -14,6 +14,7 @@ const mapDispatchToProps = dispatch => ({
     sortByCategory: () => {dispatch(sortEvents('category'))},
     sortByVenue: () => {dispatch(sortEvents('venue'))},
     sortByOrganiser: () => {dispatch(sortEvents('organiser'))},
+    resetSort: () => {dispatch(sortEvents())},
     reverseSortOrder: () => {dispatch(reverseSortOrder())}
 });
 
@@ -27,7 +28,7 @@ const TickedDropdownItem = ({name, sortValue, event}) => {
     );
 };
 
-const SortDropdown = ({sortValue, sortByPopularity, sortByName, sortByDate, sortByCategory, sortByVenue, sortByOrganiser}) => (
+const SortDropdown = ({sortValue, sortByPopularity, sortByName, sortByDate, sortByCategory, sortByVenue, sortByOrganiser, resetSort}) => (
     <UncontrolledDropdown>
         <DropdownToggle caret>Sort by</DropdownToggle>
         <DropdownMenu>
@@ -37,6 +38,8 @@ const SortDropdown = ({sortValue, sortByPopularity, sortByName, sortByDate, sort
             <TickedDropdownItem name="Category" sortValue={sortValue} event={sortByCategory} />
             <TickedDropdownItem name="Venue" sortValue={sortValue} event={sortByVenue} />
             <TickedDropdownItem name="Organiser" sortValue={sortValue} event={sortByOrganiser} />
+            <DropdownItem divider />
+            <TickedDropdownItem name="Reset" event={resetSort} />
         </DropdownMenu>
     </UncontrolledDropdown>
 );

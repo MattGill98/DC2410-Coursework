@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    filterMe: () => {dispatch(filterEvents('me'))},
+    filterMe: () => {dispatch(filterEvents('mine'))},
     filterSubscribed: () => {dispatch(filterEvents('subscribed'))},
     filterSport: () => {dispatch(filterEvents('sport'))},
     filterCulture: () => {dispatch(filterEvents('culture'))},
@@ -20,7 +20,7 @@ const FilterDropdown = ({filters, filterMe, filterSubscribed, filterSport, filte
         <DropdownToggle caret>Filter by</DropdownToggle>
         <DropdownMenu>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterMe()}>
-                <Input type="checkbox" checked={filters.includes('me')} onChange={e => {}}/>{' '}My Events
+                <Input type="checkbox" checked={filters.includes('mine')} onChange={e => {}}/>{' '}My Events
             </button>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterSubscribed()}>
                 <Input type="checkbox" checked={filters.includes('subscribed')} onChange={e => {}}/>{' '}Subscribed
