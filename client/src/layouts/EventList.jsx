@@ -1,16 +1,18 @@
 import { fetchEvents } from 'actions/eventListActions.js';
+import ButtonBar from 'components/ButtonBar.jsx';
 import EventCard from 'components/EventCard.jsx';
+import FilterDropdown from 'components/FilterDropdown.jsx';
+import SortDropdown from 'components/SortDropdown.jsx';
 import React from 'react';
 import { connect } from 'react-redux';
-import ButtonBar from 'components/ButtonBar.jsx';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup, ButtonToolbar, Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 
 const mapStateToProps = state => {
     return {
         events: state.EventList.items,
-        loading: state.EventList.loading,
-        error: state.EventList.error
+        fetching: state.EventList.fetching,
+        fetchingError: state.EventList.fetchingError
     };
 };
 
@@ -21,13 +23,13 @@ class EventList extends React.Component {
     }
 
     render() {
-        const { events, loading, error } = this.props;
+        const { events, fetching, fetchingError } = this.props;
 
-        if (error) {
+        if (fetchingError) {
             return <div>Error!</div>
         }
 
-        if (loading) {
+        if (fetching) {
             return <div>Loading...</div>
         }
 
@@ -35,19 +37,9 @@ class EventList extends React.Component {
             <div style={{textAlign: "center"}}>
                 <ButtonBar>
                     <Button outline color="success" tag={Link} to="/events/new">New Event</Button>
+                    <FilterDropdown />
+                    <SortDropdown />
                 </ButtonBar>
-
-                <span class="badge badge-pill badge-info">Sort</span>
-                <ButtonToolbar className="mb-4">
-                    <ButtonGroup style={{margin: "auto"}}>
-                        <Button outline color="secondary">Popularity</Button>
-                        <Button outline color="secondary">Name</Button>
-                        <Button outline color="secondary">Date</Button>
-                        <Button outline color="secondary">Category</Button>
-                        <Button outline color="secondary">Venue</Button>
-                        <Button outline color="secondary">Organiser</Button>
-                    </ButtonGroup>
-                </ButtonToolbar>
 
                 <Row>
                     {

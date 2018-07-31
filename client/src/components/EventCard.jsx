@@ -10,8 +10,8 @@ const EventCard = ({ event }) => (
         <CardBody>
             {
                 event.picture ?
-                    <img class="mb-2" width="100%" src={"/api/event/" + event._id + "/picture"} alt={event.name} /> :
-                    <img class="mb-2" width="100%" src={reactLogo} alt={event.name} />
+                    <img className="mb-2" width="100%" src={"/api/event/" + event._id + "/picture"} alt={event.name} /> :
+                    <img className="mb-2" width="100%" src={reactLogo} alt={event.name} />
             }
             <CardTitle className="align-center">{titlecase(event.name)}</CardTitle>
             <table className="table table-bordered">
