@@ -7,6 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
+import {GridLoader} from 'react-spinners';
 
 const mapStateToProps = state => {
     return {
@@ -14,6 +15,22 @@ const mapStateToProps = state => {
         fetching: state.EventList.fetching,
         fetchingError: state.EventList.fetchingError
     };
+};
+
+const EventGrid = (props) => {
+    if (!props.events) return null;
+    
+    return (
+        <Row>
+            {
+                props.events.map((event) =>
+                    <Col key={event._id} sm="6" lg="4">
+                        <EventCard event={event} />
+                    </Col>
+                )
+            }
+        </Row>
+    );
 };
 
 class EventList extends React.Component {
@@ -29,27 +46,17 @@ class EventList extends React.Component {
             return <div>Error!</div>
         }
 
-        if (fetching) {
-            return <div>Loading...</div>
-        }
-
         return (
-            <div style={{textAlign: "center"}}>
+            <div>
                 <ButtonBar>
                     <Button outline color="success" tag={Link} to="/events/new">New Event</Button>
                     <FilterDropdown />
                     <SortDropdown />
                 </ButtonBar>
 
-                <Row>
-                    {
-                        events.map((event) =>
-                            <Col key={event._id} sm="6" lg="4">
-                                <EventCard event={event} />
-                            </Col>
-                        )
-                    }
-                </Row>
+                <GridLoader color={'#95A09E'} loaderStyle={{'margin': 'auto'}} loading={fetching} />
+
+                <EventGrid events={events} />
             </div>
         );
     }
