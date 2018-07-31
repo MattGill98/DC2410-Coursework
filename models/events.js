@@ -130,15 +130,32 @@ module.exports = function (mongoose) {
                 });
             });
         },
-        find: function (conditions, sortColumn, callback) {
-            if (conditions == null) {
-                Event.find({}, [], {}, callback);
+        find: function (filterString, sortString, sortOrder, username, limit, offset, callback) {
+
+            // Find the filters
+            var conditions = {};
+            if (filterString) {
+                if (filterString.includes('sport')) conditions.category = 'sport';
+                if (filterString.includes('culture')) conditions.category = 'culture';
+                if (filterString.includes('others')) conditions.category = 'others';
+                if (filterString.includes('mine')) conditions.organiser = username;
+                if (filterString.includes('subscribed')) conditions.subscribed = username;
             }
+
+            // Find the sort order
+            var sortOrderValue = 1;
+            if (sortOrder === 'desc') sortOrderValue = -1;
+
+            // Find the sort value
             var sort = {};
-            sort[sortColumn] = 1;
-            Event.find(conditions, [], {
-                sort: sort
-            }, callback);
+            if (sortString === 'popularity') sort.interested = sortOrderValue;
+            if (sortString === 'name') sort.name = sortOrderValue;
+            if (sortString === 'date') sort.date = sortOrderValue;
+            if (sortString === 'category') sort.category = sortOrderValue;
+            if (sortString === 'venue') sort.venue = sortOrderValue;
+            if (sortString === 'organiser') sort.organiser = sortOrderValue;
+
+            Event.find(conditions, [], {'sort': sort, 'skip': offset, 'limit': limit}, callback);
         },
         update: function (id, updatedMessage, callback) {
             Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);

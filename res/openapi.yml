@@ -20,6 +20,13 @@ paths:
           schema:
             type: string
             enum: ["popularity", "name", "date", "category", "venue", "organiser"]
+        - name: "sort"
+          in: query
+          required: false
+          description: "Determines the sort order."
+          schema:
+            type: string
+            enum: ["asc", "desc"]
         - name: "filter"
           in: query
           required: false
@@ -28,11 +35,17 @@ paths:
             type: array
             items:
               type: string
-              enum: ["me", "subscribed", "sport", "culture", "others"]
+              enum: ["mine", "subscribed", "sport", "culture", "others"]
         - name: "limit"
           in: query
           required: false
           description: "Only show the first x results."
+          schema:
+            type: integer
+        - name: "offset"
+          in: query
+          required: false
+          description: "Start at the nth result."
           schema:
             type: integer
       responses:

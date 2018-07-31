@@ -11,6 +11,7 @@ module.exports = function (Event) {
 
             if (user.role != 'organiser') return response.status(500).send({message: 'Role must be \'organiser\' to create events.'});
 
+            request.body.organiser = user.username;
             Event.create(request.body, (err, res) => {
                 if (err) return response.status(500).send(err);
                 if (!res) return response.status(500).send({message: 'Error creating event.'});
