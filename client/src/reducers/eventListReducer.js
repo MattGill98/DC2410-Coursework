@@ -33,6 +33,12 @@ export default (state = initialState, action) => {
             };
 
         case FILTER_EVENTS:
+            if (!action.payload) {
+                return {
+                    ...state,
+                    filters: []
+                };
+            }
             if (state.filters.includes(action.payload)) {
                 return {
                     ...state,

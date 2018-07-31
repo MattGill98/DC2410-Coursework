@@ -45,11 +45,18 @@ export function fetchEvents() {
             limit: 6,
             offset: 0
         };
-        if (getState().EventList.filters) {
-            params.filter = getState().EventList.filters;
-        }
-        if (getState().EventList.sortValue) {
-            params.sort = getState().EventList.sortValue;
+
+        // If the user is logged out, clear all filters and sort data
+        if (!getState().User.authenticated) {
+            dispatch(sortEventState());
+            dispatch(filterEventState());
+        } else {
+            if (getState().EventList.filters) {
+                params.filter = getState().EventList.filters;
+            }
+            if (getState().EventList.sortValue) {
+                params.sort = getState().EventList.sortValue;
+            }
         }
 
         // If the user is a student or organiser, add the query parameters

@@ -1,3 +1,5 @@
+import { fetchEvents } from "./eventListActions";
+
 export const RESET_ERROR = 'RESET_ERROR';
 
 export const AUTHENTICATION_BEGIN = 'AUTHENTICATION_BEGIN';
@@ -99,6 +101,7 @@ export function logout() {
             })
             .then(res => {
                 dispatch(deauthenticationSuccess(res));
+                dispatch(fetchEvents());
                 return res;
             })
             .catch(res => res.text().then(err => dispatch(deauthenticationFailure(err))));

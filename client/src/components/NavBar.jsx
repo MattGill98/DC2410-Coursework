@@ -28,7 +28,7 @@ function NavItems(props) {
     return (
         <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink tag={Link} to="#" onClick={e => {props.dispatch(logout())}}>Logout</NavLink>
+                <NavLink tag={Link} to="/" onClick={e => {props.dispatch(logout())}}>Logout</NavLink>
             </NavItem>
         </Nav>
     );
