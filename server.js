@@ -39,6 +39,7 @@ const Event = require('./models/events.js')(mongoose);
 // Add routes
 app.use('/api', require('./routes/public.js')(Event));
 app.use('/api', require('./routes/member.js')(Event));
+app.use('/api', require('./routes/student.js')(Event));
 app.use('/api', require('./routes/organiser.js')(Event));
 
 module.exports = app;

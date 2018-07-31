@@ -38,19 +38,27 @@ export function fetchEvents() {
         // Reset the single event data when the page begins to load
         dispatch(fetchEventBegin());
         dispatch(fetchEventsBegin());
+
+        // Begin building url to request
         const url = new URL(window.location.origin + '/api/events');
-        const params = {};
+        const params = {
+            limit: 6,
+            offset: 0
+        };
         if (getState().EventList.filters) {
             params.filter = getState().EventList.filters;
         }
         if (getState().EventList.sortValue) {
             params.sort = getState().EventList.sortValue;
         }
+
+        // If the user is a student or organiser, add the query parameters
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
         return fetch(url)
             .then(res => {
                 if (!res.ok) {
-                    throw new Error(res.statusText);
+                    throw res;
                 }
                 return res.json();
             })
@@ -58,7 +66,7 @@ export function fetchEvents() {
                 dispatch(fetchEventsSuccess(res));
                 return res;
             })
-            .catch(err => dispatch(fetchEventsFailure(err)));
+            .catch(res => res.json().then(err => dispatch(fetchEventsFailure(err.message))));
     };
 }
 

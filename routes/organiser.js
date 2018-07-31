@@ -7,7 +7,7 @@ module.exports = function (Event) {
     router.post('/events', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
-            if (!user) return response.status(500).send({message: 'No user found.'});
+            if (!user) return response.status(500).send({ message: 'You need to be authenticated to perform this action.' });
 
             if (user.role != 'organiser') return response.status(500).send({message: 'Role must be \'organiser\' to create events.'});
 
@@ -22,7 +22,7 @@ module.exports = function (Event) {
     router.delete('/event/:id', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
-            if (!user) return response.status(500).send({message: 'No user found.'});
+            if (!user) return response.status(500).send({ message: 'You need to be authenticated to perform this action.' });
 
             if (user.role != 'organiser') return response.status(500).send({message: 'Role must be \'organiser\' to delete events.'});
 

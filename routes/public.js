@@ -4,30 +4,6 @@ const passport = require('passport');
 const securityConf = require('../config/security.js');
 
 module.exports = function (Event) {
-    // Fetch all events
-    router.get('/events', (request, response) => {
-        if (request.query.filter == null) {
-            request.query.filter = [];
-        }
-        var conditions = {};
-        if (request.query.filter.includes('sport')) {
-            conditions.category = 'sport';
-        }
-        if (request.query.filter.includes('culture')) {
-            conditions.category = 'culture';
-        }
-        if (request.query.filter.includes('other')) {
-            conditions.category = 'other';
-        }
-        if (request.query.filter.includes('me')) {
-            conditions.organiser = 'Matt Gill';
-        }
-
-        Event.find(conditions, request.query.sort, (err, res) => {
-            if (err) return response.status(500).send(err);
-            response.send(res);
-        });
-    });
 
     // Get a specific event
     router.get('/event/:id', (request, response) => {
