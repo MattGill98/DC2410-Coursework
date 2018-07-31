@@ -20,19 +20,19 @@ const FilterDropdown = ({filters, filterMe, filterSubscribed, filterSport, filte
         <DropdownToggle caret>Filter by</DropdownToggle>
         <DropdownMenu>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterMe()}>
-                <Input type="checkbox" checked={filters.me} onChange={e => {}}/>{' '}My Events
+                <Input type="checkbox" checked={filters.includes('me')} onChange={e => {}}/>{' '}My Events
             </button>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterSubscribed()}>
-                <Input type="checkbox" checked={filters.subscribed} onChange={e => {}}/>{' '}Subscribed
+                <Input type="checkbox" checked={filters.includes('subscribed')} onChange={e => {}}/>{' '}Subscribed
             </button>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterSport()}>
-                <Input type="checkbox" checked={filters.sport} onChange={e => {}}/>{' '}Sport
+                <Input type="checkbox" checked={filters.includes('sport')} onChange={e => {}}/>{' '}Sport
             </button>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterCulture()}>
-                <Input type="checkbox" checked={filters.culture} onChange={e => {}}/>{' '}Culture
+                <Input type="checkbox" checked={filters.includes('culture')} onChange={e => {}}/>{' '}Culture
             </button>
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterOthers()}>
-                <Input type="checkbox" checked={filters.others} onChange={e => {}}/>{' '}Others
+                <Input type="checkbox" checked={filters.includes('others')} onChange={e => {}}/>{' '}Others
             </button>
         </DropdownMenu>
     </UncontrolledDropdown>

@@ -5,13 +5,7 @@ const initialState = {
     fetching: false,
     fetchingError: null,
 
-    filters: {
-        me: false,
-        subscribed: false,
-        sport: false,
-        culture: false,
-        others: false
-    },
+    filters: [],
     sortValue: null,
     sortOrder: false
 };
@@ -39,12 +33,18 @@ export default (state = initialState, action) => {
             };
 
         case FILTER_EVENTS:
+            if (state.filters.includes(action.payload)) {
+                return {
+                    ...state,
+                    filters: state.filters.filter(item => item !== action.payload)
+                };
+            }
             return {
                 ...state,
-                filters: {
-                    ...state.filters,
-                    [action.payload]: !state.filters[action.payload]
-                }
+                filters: [
+                    ...state.filters.slice(),
+                    action.payload
+                ]
             };
         case SORT_EVENTS:
             return {

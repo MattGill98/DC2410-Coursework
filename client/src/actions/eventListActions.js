@@ -8,37 +8,46 @@ export const FILTER_EVENTS = 'FILTER_EVENTS';
 export const SORT_EVENTS = 'SORT_EVENTS';
 export const REVERSE_SORT_ORDER = 'REVERSE_SORT_ORDER';
 
-export const fetchEventsBegin = () => ({
+const fetchEventsBegin = () => ({
     type: FETCH_EVENTS_BEGIN
 });
-export const fetchEventsSuccess = (events) => ({
+const fetchEventsSuccess = (events) => ({
     type: FETCH_EVENTS_SUCCESS,
     payload: events
 });
-export const fetchEventsFailure = (error) => ({
+const fetchEventsFailure = (error) => ({
     type: FETCH_EVENTS_FAILURE,
     payload: error
 });
 
-export const filterEvents = (filterString) => ({
+const filterEventState = (filterString) => ({
     type: FILTER_EVENTS,
     payload: filterString
 });
 
-export const sortEvents = (sortString) => ({
+const sortEventState = (sortString) => ({
     type: SORT_EVENTS,
     payload: sortString
 });
-export const reverseSortOrder = () => ({
+const sortOrderReversal = () => ({
     type: REVERSE_SORT_ORDER
 });
 
 export function fetchEvents() {
-    return dispatch => {
-        dispatch(fetchEventsBegin());
+    return (dispatch, getState) => {
         // Reset the single event data when the page begins to load
         dispatch(fetchEventBegin());
-        return fetch('/api/events')
+        dispatch(fetchEventsBegin());
+        const url = new URL(window.location.origin + '/api/events');
+        const params = {};
+        if (getState().EventList.filters) {
+            params.filter = getState().EventList.filters;
+        }
+        if (getState().EventList.sortValue) {
+            params.sort = getState().EventList.sortValue;
+        }
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        return fetch(url)
             .then(res => {
                 if (!res.ok) {
                     throw new Error(res.statusText);
@@ -50,5 +59,26 @@ export function fetchEvents() {
                 return res;
             })
             .catch(err => dispatch(fetchEventsFailure(err)));
+    };
+}
+
+export function filterEvents(filterString) {
+    return dispatch => {
+        dispatch(filterEventState(filterString));
+        dispatch(fetchEvents());
+    };
+}
+
+export function sortEvents(sortString) {
+    return dispatch => {
+        dispatch(sortEventState(sortString));
+        dispatch(fetchEvents());
+    };
+}
+
+export function reverseSortOrder() {
+    return dispatch => {
+        dispatch(sortOrderReversal());
+        dispatch(fetchEvents());
     };
 }
