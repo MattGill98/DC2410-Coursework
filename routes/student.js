@@ -8,9 +8,15 @@ module.exports = function (Event) {
 
         // If there are no filter or sort parameters, return all events
         if (!request.query.filter && !request.query.sort) {
-            return Event.find(null, null, null, null, request.query.limit, request.query.offset, (err, res) => {
+            return Event.find(null, null, null, null, request.query.limit, request.query.offset, (err, results) => {
                 if (err) return response.status(500).send(err);
-                response.send(res);
+                Event.count(null, null, (err, count) => {
+                    if (err) return response.status(500).send(err);
+                    response.send({
+                        data: results,
+                        count: count
+                    });
+                });
             });
         }
 
@@ -20,9 +26,15 @@ module.exports = function (Event) {
 
             if (user.role !== 'organiser' && user.role !== 'student') return response.status(500).send({ message: 'Only students and organisers can filter events.' });
 
-            Event.find(request.query.filter, request.query.sort, request.query.order, user.username, request.query.limit, request.query.offset, (err, res) => {
+            Event.find(request.query.filter, request.query.sort, request.query.order, user.username, request.query.limit, request.query.offset, (err, results) => {
                 if (err) return response.status(500).send(err);
-                response.send(res);
+                Event.count(request.query.filter, user.username, (err, count) => {
+                    if (err) return response.status(500).send(err);
+                    response.send({
+                        data: results,
+                        count: count
+                    });
+                });
             });
         })(request, response, next);
     });

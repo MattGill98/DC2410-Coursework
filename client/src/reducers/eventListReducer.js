@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 fetching: false,
-                items: action.payload
+                items: action.payload.data
             };
         case FETCH_EVENTS_FAILURE:
             return {

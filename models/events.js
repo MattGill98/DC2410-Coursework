@@ -157,6 +157,20 @@ module.exports = function (mongoose) {
 
             Event.find(conditions, [], {'sort': sort, 'skip': Number(offset), 'limit': Number(limit)}, callback);
         },
+        count: function(filterString, username, callback) {
+
+            // Find the filters
+            var conditions = {};
+            if (filterString) {
+                if (filterString.includes('sport')) conditions.category = 'sport';
+                if (filterString.includes('culture')) conditions.category = 'culture';
+                if (filterString.includes('others')) conditions.category = 'others';
+                if (filterString.includes('mine')) conditions.organiser = username;
+                if (filterString.includes('subscribed')) conditions.interested = username;
+            }
+
+            Event.count(conditions, callback);
+        },
         update: function (id, updatedMessage, callback) {
             Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);
         },
