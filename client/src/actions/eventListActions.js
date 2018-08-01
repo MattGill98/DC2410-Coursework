@@ -57,6 +57,9 @@ export function fetchEvents() {
             if (getState().EventList.sortValue) {
                 params.sort = getState().EventList.sortValue;
             }
+            if (getState().EventList.sortOrder) {
+                params.order = 'desc';
+            }
         }
 
         // If the user is a student or organiser, add the query parameters

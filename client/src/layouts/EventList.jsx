@@ -14,7 +14,8 @@ const mapStateToProps = state => {
     return {
         events: state.EventList.items,
         fetching: state.EventList.fetching,
-        fetchingError: state.EventList.fetchingError
+        fetchingError: state.EventList.fetchingError,
+        role: state.User.role
     };
 };
 
@@ -41,12 +42,13 @@ class EventList extends React.Component {
     }
 
     render() {
-        const { events, fetching, fetchingError } = this.props;
+        const { events, fetching, fetchingError, role } = this.props;
 
         return (
             <div>
                 <ErrorAlert error={fetchingError} id="fetchErrorAlert" />
-                <ButtonBar>
+
+                <ButtonBar visible={role === 'student' || role === 'organiser'}>
                     <Button outline color="success" tag={Link} to="/events/new">New Event</Button>
                     <FilterDropdown />
                     <SortDropdown />
