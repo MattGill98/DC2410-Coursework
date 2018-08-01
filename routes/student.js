@@ -8,7 +8,7 @@ module.exports = function (Event) {
 
         // If there are no filter or sort parameters, return all events
         if (!request.query.filter && !request.query.sort) {
-            return Event.find(null, null, null, null, null, null, (err, res) => {
+            return Event.find(null, null, null, null, request.query.limit, request.query.offset, (err, res) => {
                 if (err) return response.status(500).send(err);
                 response.send(res);
             });

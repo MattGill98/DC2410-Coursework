@@ -155,7 +155,7 @@ module.exports = function (mongoose) {
             if (sortString === 'venue') sort.venue = sortOrderValue;
             if (sortString === 'organiser') sort.organiser = sortOrderValue;
 
-            Event.find(conditions, [], {'sort': sort, 'skip': Number(offset), 'limit': Number(offset)}, callback);
+            Event.find(conditions, [], {'sort': sort, 'skip': Number(offset), 'limit': Number(limit)}, callback);
         },
         update: function (id, updatedMessage, callback) {
             Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);
