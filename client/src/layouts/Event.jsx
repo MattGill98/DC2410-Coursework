@@ -8,6 +8,7 @@ import reactLogo from 'images/logo.svg';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from "react-router-dom";
+import { GridLoader } from 'react-spinners';
 import { Button, Card, CardBody, CardTitle, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import titlecase from 'title-case';
 
@@ -26,6 +27,25 @@ const mapStateToProps = state => {
         subscribed: state.Event.subscribed,
         subscriptionError: state.Event.subscriptionError
     };
+};
+
+const EventData = ({ eventData, visible }) => {
+    if (visible === false) {
+        return null;
+    }
+    return (
+        <div>
+            <h1>{eventData.name}</h1>
+            <Row>
+                <img src={'/api/event/' + eventData._id + '/picture'} />
+            </Row>
+            <p>Date: {dateFormat(eventData.date, 'dS mmmm yyyy')}</p>
+            <p>Category: {titlecase(eventData.category)}</p>
+            <p>Venue: {titlecase(eventData.venue)}</p>
+            <p>Organiser: {titlecase(eventData.organiser)}</p>
+            <p>Description: {titlecase(eventData.description)}</p>
+        </div>
+    );
 };
 
 class Event extends React.Component {
@@ -52,10 +72,6 @@ class Event extends React.Component {
 
     render() {
         const { eventData, fetching, fetchError, deleted, deleting, deletionError, subscribing, subscribed, subscriptionError } = this.props;
-
-        if (fetching) {
-            return <div>Fetching Event...</div>
-        }
 
         if (fetchError) {
             return <div>{fetchError}</div>
@@ -100,27 +116,9 @@ class Event extends React.Component {
                     </ModalFooter>
                 </Modal>
 
-                <Row>
-                    <Card className="text-center col-ms-3 col-xs-6">
-                        <CardBody>
-                            {
-                                eventData.picture ?
-                                    <img width="100%" src={"/api/event/" + eventData._id + "/picture"} alt={eventData.name} /> :
-                                    <img width="100%" src={reactLogo} alt={eventData.name} />
-                            }
-                            <CardTitle className="align-center">{titlecase(eventData.name)}</CardTitle>
-                            <table className="table table-bordered">
-                                <tbody>
-                                    <tr><td>Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
-                                    <tr><td>Category</td><td>{eventData.category}</td></tr>
-                                    <tr><td>Venue</td><td>{eventData.venue}</td></tr>
-                                    <tr><td>Organiser</td><td>{eventData.organiser}</td></tr>
-                                </tbody>
-                            </table>
-                            <Button outline block color="primary" tag={Link} to={"/event/" + this.state.eventId}>View Event</Button>
-                        </CardBody>
-                    </Card>
-                </Row>
+                <GridLoader color={'#95A09E'} loaderStyle={{'margin': 'auto'}} loading={fetching} />
+
+                <EventData eventData={eventData} visible={!fetching} />
             </div>
         );
     }
