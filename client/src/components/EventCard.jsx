@@ -32,8 +32,8 @@ const EventCard = ({ event, authenticated }) => (
             <table className="table table-bordered">
                 <tbody>
                     <tr><td>Date</td><td>{dateFormat(event.date, 'dS mmmm yyyy')}</td></tr>
-                    <tr><td>Category</td><td>{event.category}</td></tr>
-                    <tr><td>Venue</td><td>{event.venue}</td></tr>
+                    <tr><td>Category</td><td>{titlecase(event.category)}</td></tr>
+                    <tr><td>Venue</td><td>{titlecase(event.venue)}</td></tr>
                     <tr><td>Organiser</td><td>{event.organiser}</td></tr>
                 </tbody>
             </table>

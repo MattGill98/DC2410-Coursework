@@ -4,12 +4,11 @@ import ButtonBar from 'components/ButtonBar.jsx';
 import ErrorAlert from 'components/ErrorAlert.jsx';
 import LoadingButton from 'components/LoadingButton.jsx';
 import dateFormat from 'dateformat';
-import reactLogo from 'images/logo.svg';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
-import { Button, Card, CardBody, CardTitle, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import titlecase from 'title-case';
 
 const mapStateToProps = state => {
@@ -34,16 +33,24 @@ const EventData = ({ eventData, visible }) => {
         return null;
     }
     return (
-        <div>
+        <div style={{textAlign: 'center'}}>
             <h1>{eventData.name}</h1>
             <Row>
-                <img src={'/api/event/' + eventData._id + '/picture'} />
+                <img style={{margin: 'auto'}} className="col-lg-10 col-md-12" src={'/api/event/' + eventData._id + '/picture'} />
             </Row>
-            <p>Date: {dateFormat(eventData.date, 'dS mmmm yyyy')}</p>
-            <p>Category: {titlecase(eventData.category)}</p>
-            <p>Venue: {titlecase(eventData.venue)}</p>
-            <p>Organiser: {titlecase(eventData.organiser)}</p>
-            <p>Description: {titlecase(eventData.description)}</p>
+            <Row>
+                <div style={{margin: 'auto'}} className="mt-3 col-lg-10 col-md-12">
+                    <table className="table table-bordered">
+                        <tbody>
+                            <tr><td className="col-2">Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
+                            <tr><td className="col-2">Category</td><td>{titlecase(eventData.category)}</td></tr>
+                            <tr><td className="col-2">Venue</td><td>{titlecase(eventData.venue)}</td></tr>
+                            <tr><td className="col-2">Organiser</td><td>{eventData.organiser}</td></tr>
+                            <tr><td className="col-2">Description</td><td>{eventData.description}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </Row>
         </div>
     );
 };
