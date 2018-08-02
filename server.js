@@ -4,9 +4,6 @@ const path = require('path');
 
 // Serve React files
 app.use(express.static(path.join(__dirname, 'client/build')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'));
-});
 
 // Configure body parsing
 const bodyParser = require('body-parser')
@@ -52,6 +49,9 @@ app.use('/api', require('./routes/public.js')(Event));
 app.use('/api', require('./routes/member.js')(Event));
 app.use('/api', require('./routes/student.js')(Event));
 app.use('/api', require('./routes/organiser.js')(Event));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
 
 module.exports = app;
 
