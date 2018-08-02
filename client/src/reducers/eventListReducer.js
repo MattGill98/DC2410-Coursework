@@ -7,7 +7,6 @@ const initialState = {
     currentPage: 0,
     pageOffset: 6,
 
-
     fetching: false,
     fetchingError: null,
 
@@ -37,6 +36,7 @@ export default (state = initialState, action) => {
                 fetching: false,
                 items: [],
                 pageCount: 1,
+                currentPage: 0,
                 fetchingError: action.payload
             };
 
@@ -44,13 +44,15 @@ export default (state = initialState, action) => {
             if (!action.payload) {
                 return {
                     ...state,
-                    filters: []
+                    filters: [],
+                    currentPage: 0
                 };
             }
             if (state.filters.includes(action.payload)) {
                 return {
                     ...state,
-                    filters: state.filters.filter(item => item !== action.payload)
+                    filters: state.filters.filter(item => item !== action.payload),
+                    currentPage: 0
                 };
             }
             return {
@@ -58,12 +60,14 @@ export default (state = initialState, action) => {
                 filters: [
                     ...state.filters.slice(),
                     action.payload
-                ]
+                ],
+                currentPage: 0
             };
         case SORT_EVENTS:
             return {
                 ...state,
-                sortValue: action.payload
+                sortValue: action.payload,
+                currentPage: 0
             };
         case REVERSE_SORT_ORDER:
             return {

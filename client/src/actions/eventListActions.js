@@ -110,7 +110,7 @@ export function reverseSortOrder() {
 
 export function changePage(pageNumber) {
     return (dispatch, getState) => {
-        if (pageNumber >= 0 && pageNumber < getState().EventList.pageCount && pageNumber != getState().EventList.currentPage) {
+        if (pageNumber >= 0 && pageNumber < getState().EventList.pageCount && pageNumber !== getState().EventList.currentPage) {
             dispatch(setPage(pageNumber));
             dispatch(fetchEvents());
         }

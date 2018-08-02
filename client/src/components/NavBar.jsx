@@ -40,7 +40,7 @@ function WelcomeMessage(props) {
     }
 
     return (
-        <span class="navbar-text">
+        <span className="navbar-text">
             Hello {props.username}! ({props.role})
         </span>
     );
