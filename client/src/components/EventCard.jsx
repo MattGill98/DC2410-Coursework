@@ -10,11 +10,11 @@ const mapStateToProps = state => ({
     authenticated: state.User.authenticated
 });
 
-const EventPicture = ({picture, id, name}) => {
-    if (!picture) {
-        return <img className="mb-2" width="100%" src={reactLogo} alt={name} />
+const EventPicture = ({src, alt, exists}) => {
+    if (exists === false) {
+        src = reactLogo;
     }
-    return <img className="mb-2" width="100%" src={"/api/event/" + id + "/picture"} alt={name} />
+    return <img className="img-fluid mb-2" style={{margin: 'auto', width: '100%', objectFit: 'cover'}} src={src} alt={alt} />
 };
 
 const ViewEventButton = ({id, visible}) => {
@@ -24,10 +24,10 @@ const ViewEventButton = ({id, visible}) => {
     return <Button outline block color="primary" tag={Link} to={"/event/" + id}>View Event</Button>
 };
 
-const EventCard = ({ event, authenticated }) => (
-    <Card className="text-center">
+const EventCard = ({ className, event, authenticated }) => (
+    <Card className={className + " text-center"}>
         <CardBody>
-            <EventPicture picture={event.picture} id={event._id} name={event.name} />
+            <EventPicture src={"/api/event/" + event._id + "/picture"} alt={event.name} exists={event.picture} />
             <CardTitle className="align-center">{event.name}</CardTitle>
             <table className="table table-bordered">
                 <tbody>

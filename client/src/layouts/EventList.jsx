@@ -28,7 +28,7 @@ const EventGrid = ({events}) => {
             {
                 events.map((event) =>
                     <Col key={event._id} sm="6" lg="4">
-                        <EventCard event={event} />
+                        <EventCard className="mt-2" event={event} />
                     </Col>
                 )
             }

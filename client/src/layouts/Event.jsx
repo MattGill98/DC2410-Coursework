@@ -1,15 +1,15 @@
 import { subscribe, unsubscribe } from 'actions/eventActions';
 import { deleteEvent, fetchEvent } from 'actions/eventActions.js';
 import ButtonBar from 'components/ButtonBar.jsx';
-import reactLogo from 'images/logo.svg';
 import ErrorAlert from 'components/ErrorAlert.jsx';
 import LoadingButton from 'components/LoadingButton.jsx';
 import dateFormat from 'dateformat';
+import reactLogo from 'images/logo.svg';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from "react-router-dom";
 import { GridLoader } from 'react-spinners';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
+import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import titlecase from 'title-case';
 
 const mapStateToProps = state => {
@@ -33,7 +33,7 @@ const EventPicture = ({src, alt, exists}) => {
     if (exists === false) {
         src = reactLogo;
     }
-    return <img className="col-lg-10 col-md-12" style={{margin: 'auto'}} src={src} alt={alt} />
+    return <img className="img-fluid" style={{width: '100%', margin: 'auto'}} src={src} alt={alt} />
 };
 
 const EventData = ({ eventData, visible }) => {
@@ -44,20 +44,24 @@ const EventData = ({ eventData, visible }) => {
         <div style={{textAlign: 'center'}}>
             <h1>{eventData.name}</h1>
             <Row>
-                <EventPicture src={'/api/event/' + eventData._id + '/picture'} alt={eventData.name} exists={eventData.picture} />
+                <Col md="12" lg="10" style={{margin: 'auto'}}>
+                    <EventPicture src={'/api/event/' + eventData._id + '/picture'} alt={eventData.name} exists={eventData.picture} />
+                </Col>
             </Row>
             <Row>
-                <div style={{margin: 'auto'}} className="mt-3 col-lg-10 col-md-12">
-                    <table className="table table-bordered">
-                        <tbody>
-                            <tr><td className="col-sm-2">Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
-                            <tr><td className="col-sm-2">Category</td><td>{titlecase(eventData.category)}</td></tr>
-                            <tr><td className="col-sm-2">Venue</td><td>{titlecase(eventData.venue)}</td></tr>
-                            <tr><td className="col-sm-2">Organiser</td><td>{eventData.organiser}</td></tr>
-                            <tr><td className="col-sm-2">Description</td><td>{eventData.description}</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <Col ms="12" lg="10" style={{margin: 'auto'}}>
+                    <div className="mt-3">
+                        <table className="table table-bordered">
+                            <tbody>
+                                <tr><td style={{width: '20%'}}>Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
+                                <tr><td style={{width: '20%'}}>Category</td><td>{titlecase(eventData.category)}</td></tr>
+                                <tr><td style={{width: '20%'}}>Venue</td><td>{titlecase(eventData.venue)}</td></tr>
+                                <tr><td style={{width: '20%'}}>Organiser</td><td>{eventData.organiser}</td></tr>
+                                <tr><td style={{width: '20%'}}>Description</td><td>{eventData.description}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </Col>
             </Row>
         </div>
     );
