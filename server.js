@@ -38,7 +38,7 @@ app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 // Connect to database
 const mongoose = require('mongoose');
 if (process.env.DATABASE_PASSWORD) {
-    mongoose.connect('mongodb://MattGill98:{0}@ds111082.mlab.com:11082/dc2410'.format(process.env.DATABASE_PASSWORD));
+    mongoose.connect('mongodb://MattGill98:' + process.env.DATABASE_PASSWORD + '@ds111082.mlab.com:11082/dc2410');
 } else {
     mongoose.connect('mongodb://localhost:27017');
 }
