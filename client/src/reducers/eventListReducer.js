@@ -2,6 +2,7 @@ import { FETCH_EVENTS_BEGIN, FETCH_EVENTS_FAILURE, FETCH_EVENTS_SUCCESS, FILTER_
 
 const initialState = {
     items: [],
+    itemCount: 0,
     fetching: false,
     fetchingError: null,
 
@@ -22,13 +23,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 fetching: false,
-                items: action.payload.data
+                items: action.payload.data,
+                itemCount: action.payload.count
             };
         case FETCH_EVENTS_FAILURE:
             return {
                 ...state,
                 fetching: false,
                 items: [],
+                itemCount: 0,
                 fetchingError: action.payload
             };
 
