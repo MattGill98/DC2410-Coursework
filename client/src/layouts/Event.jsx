@@ -36,7 +36,7 @@ const EventData = ({ eventData, visible }) => {
         <div style={{textAlign: 'center'}}>
             <h1>{eventData.name}</h1>
             <Row>
-                <img style={{margin: 'auto'}} className="col-lg-10 col-md-12" src={'/api/event/' + eventData._id + '/picture'} />
+                <img style={{margin: 'auto'}} className="col-lg-10 col-md-12" src={'/api/event/' + eventData._id + '/picture'} alt={eventData.name} />
             </Row>
             <Row>
                 <div style={{margin: 'auto'}} className="mt-3 col-lg-10 col-md-12">

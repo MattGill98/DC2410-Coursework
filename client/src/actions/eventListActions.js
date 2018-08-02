@@ -42,8 +42,8 @@ export function fetchEvents() {
         // Begin building url to request
         const url = new URL(window.location.origin + '/api/events');
         const params = {
-            limit: 6,
-            offset: 0
+            limit: getState().EventList.pageOffset,
+            offset: getState().EventList.pageOffset * getState().EventList.currentPage
         };
 
         // If the user is logged out, clear all filters and sort data

@@ -3,6 +3,10 @@ import { FETCH_EVENTS_BEGIN, FETCH_EVENTS_FAILURE, FETCH_EVENTS_SUCCESS, FILTER_
 const initialState = {
     items: [],
     itemCount: 0,
+    currentPage: 0,
+    pageOffset: 6,
+
+
     fetching: false,
     fetchingError: null,
 

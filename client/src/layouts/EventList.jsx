@@ -2,6 +2,7 @@ import { fetchEvents } from 'actions/eventListActions.js';
 import ButtonBar from 'components/ButtonBar.jsx';
 import ErrorAlert from 'components/ErrorAlert.jsx';
 import EventCard from 'components/EventCard.jsx';
+import EventPagination from 'components/EventPagination.jsx';
 import FilterDropdown from 'components/FilterDropdown.jsx';
 import SortDropdown from 'components/SortDropdown.jsx';
 import React from 'react';
@@ -33,33 +34,6 @@ const EventGrid = ({events}) => {
                 )
             }
         </Row>
-    );
-};
-
-const EventPagination = ({pages}) => {
-    if (pages === 1) {
-        return null;
-    }
-    return (
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center mt-3">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                {
-                    [...Array(pages)].map((e, i) => (<li class="page-item"><a class="page-link">{i + 1}</a></li>))
-                }
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
     );
 };
 
