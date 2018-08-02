@@ -5,6 +5,11 @@ const passport = require('passport');
 module.exports = function (Event) {
 
     router.get('/events', (request, response, next) => {
+        request.query.filter = request.sanitize(request.query.filter);
+        request.query.sort = request.sanitize(request.query.sort);
+        request.query.order = request.sanitize(request.query.order);
+        request.query.limit = request.sanitize(request.query.limit);
+        request.query.offset = request.sanitize(request.query.offset);
 
         // If there are no filter or sort parameters, return all events
         if (!request.query.filter && !request.query.sort) {

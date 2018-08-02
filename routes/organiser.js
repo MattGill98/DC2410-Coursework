@@ -5,6 +5,11 @@ const passport = require('passport');
 module.exports = function (Event) {
 
     router.post('/events', (request, response, next) => {
+        request.body.name = request.sanitize(request.body.name);
+        request.body.category = request.sanitize(request.body.category);
+        request.body.description = request.sanitize(request.body.description);
+        request.body.date = request.sanitize(request.body.date);
+        request.body.venue = request.sanitize(request.body.venue);
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
             if (!user) return response.status(500).send({ message: 'You need to be authenticated to perform this action.' });

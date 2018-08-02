@@ -5,6 +5,14 @@ const path = require('path');
 // Serve React files
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+// Configure helmet
+const helmet = require('helmet');
+app.use(helmet());
+
+// Configure sanitizer
+const expressSanitizer = require('express-sanitizer');
+app.use(expressSanitizer());
+
 // Configure body parsing
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());

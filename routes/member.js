@@ -5,6 +5,7 @@ const passport = require('passport');
 module.exports = function (Event) {
 
     router.put('/event/:id/interest', (request, response, next) => {
+        request.body = request.sanitize(request.body);
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
             if (!user) return response.status(500).send({message: 'You need to be authenticated to perform this action.'});
@@ -18,6 +19,7 @@ module.exports = function (Event) {
     });
 
     router.delete('/event/:id/interest', (request, response, next) => {
+        request.body = request.sanitize(request.body);
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
             if (!user) return response.status(500).send({message: 'You need to be authenticated to perform this action.'});

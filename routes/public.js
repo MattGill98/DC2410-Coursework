@@ -33,6 +33,8 @@ module.exports = function (Event) {
 
     // Register
     router.post('/register', (req, res, next) => {
+        req.body.username = req.sanitize(req.body.username);
+        req.body.password = req.sanitize(req.body.password);
         passport.authenticate('register', { session: false }, (err, user, info) => {
             if (err) return res.status(500).send({message: 'Error registering user.'});
             if (!user) return res.status(500).send({message: info.message});
@@ -44,6 +46,8 @@ module.exports = function (Event) {
 
     // Login
     router.post('/login', (req, res, next) => {
+        req.body.username = req.sanitize(req.body.username);
+        req.body.password = req.sanitize(req.body.password);
         passport.authenticate('login', { session: false }, (err, user, info) => {
             if (err) return res.status(500).send({message: 'Error authenticating.'});
             if (!user) return res.status(500).send({message: info.message});
