@@ -28,7 +28,7 @@ const EventCard = ({ event, authenticated }) => (
     <Card className="text-center">
         <CardBody>
             <EventPicture picture={event.picture} id={event._id} name={event.name} />
-            <CardTitle className="align-center">{titlecase(event.name)}</CardTitle>
+            <CardTitle className="align-center">{event.name}</CardTitle>
             <table className="table table-bordered">
                 <tbody>
                     <tr><td>Date</td><td>{dateFormat(event.date, 'dS mmmm yyyy')}</td></tr>
