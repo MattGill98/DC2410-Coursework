@@ -35,7 +35,7 @@ paths:
             type: array
             items:
               type: string
-              enum: ["mine", "subscribed", "sport", "culture", "others"]
+              enum: ["mine", "subscribed", "sport", "culture", "other"]
         - name: "limit"
           in: query
           required: false
@@ -93,7 +93,7 @@ paths:
                   type: string
                 category:
                   type: string
-                  enum: ["sport", "culture", "others"]
+                  enum: ["sport", "culture", "other"]
                 date:
                   type: string
                   format: date
@@ -283,7 +283,7 @@ components:
           type: string
         category:
           type: string
-          enum: ["sport", "culture", "others"]
+          enum: ["sport", "culture", "other"]
         date:
           type: string
           format: date

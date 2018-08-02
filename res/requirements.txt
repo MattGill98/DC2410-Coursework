@@ -7,7 +7,7 @@ USERS CAN
 - Logout
 
 STUDENT USERS CAN
-- List all event information by the three categories (sport/culture/others)
+- List all event information by the three categories (sport/culture/other)
 - List all event information according to popularity
 - List all event information according to dates
 - View details of a specific event

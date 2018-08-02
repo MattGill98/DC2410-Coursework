@@ -137,7 +137,7 @@ module.exports = function (mongoose) {
             if (filterString) {
                 if (filterString.includes('sport')) conditions.category = 'sport';
                 if (filterString.includes('culture')) conditions.category = 'culture';
-                if (filterString.includes('others')) conditions.category = 'others';
+                if (filterString.includes('other')) conditions.category = 'other';
                 if (filterString.includes('mine')) conditions.organiser = username;
                 if (filterString.includes('subscribed')) conditions.interested = username;
             }
@@ -164,7 +164,7 @@ module.exports = function (mongoose) {
             if (filterString) {
                 if (filterString.includes('sport')) conditions.category = 'sport';
                 if (filterString.includes('culture')) conditions.category = 'culture';
-                if (filterString.includes('others')) conditions.category = 'others';
+                if (filterString.includes('other')) conditions.category = 'other';
                 if (filterString.includes('mine')) conditions.organiser = username;
                 if (filterString.includes('subscribed')) conditions.interested = username;
             }

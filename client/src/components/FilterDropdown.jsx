@@ -12,10 +12,10 @@ const mapDispatchToProps = dispatch => ({
     filterSubscribed: () => {dispatch(filterEvents('subscribed'))},
     filterSport: () => {dispatch(filterEvents('sport'))},
     filterCulture: () => {dispatch(filterEvents('culture'))},
-    filterOthers: () => {dispatch(filterEvents('others'))}
+    filterOther: () => {dispatch(filterEvents('other'))}
 });
 
-const FilterDropdown = ({filters, filterMe, filterSubscribed, filterSport, filterCulture, filterOthers}) => (
+const FilterDropdown = ({filters, filterMe, filterSubscribed, filterSport, filterCulture, filterOther}) => (
     <UncontrolledDropdown>
         <DropdownToggle caret>Filter by</DropdownToggle>
         <DropdownMenu>
@@ -31,8 +31,8 @@ const FilterDropdown = ({filters, filterMe, filterSubscribed, filterSport, filte
             <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterCulture()}>
                 <Input type="checkbox" checked={filters.includes('culture')} onChange={e => {}}/>{' '}Culture
             </button>
-            <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterOthers()}>
-                <Input type="checkbox" checked={filters.includes('others')} onChange={e => {}}/>{' '}Others
+            <button className="dropdown-item" type="button" tabIndex="0" onClick={e => filterOther()}>
+                <Input type="checkbox" checked={filters.includes('other')} onChange={e => {}}/>{' '}Other
             </button>
         </DropdownMenu>
     </UncontrolledDropdown>
