@@ -1,5 +1,12 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+
+// Serve React files
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
 
 // Configure body parsing
 const bodyParser = require('body-parser')
@@ -30,7 +37,11 @@ app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // Connect to database
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017');
+if (process.env.DATABASE_PASSWORD) {
+    mongoose.connect('mongodb://MattGill98:{0}@ds111082.mlab.com:11082/dc2410'.format(process.env.DATABASE_PASSWORD));
+} else {
+    mongoose.connect('mongodb://localhost:27017');
+}
 
 // Create tables
 const User = require('./models/users.js')(mongoose);

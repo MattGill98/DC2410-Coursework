@@ -1,6 +1,7 @@
 const server = require('./server.js');
-const config = require('./config.json');
 
-server.listen(config.port, err => {
-    console.log('Started server on port ' + config.port);
+const port = process.env.PORT || 9000;
+
+server.listen(port, err => {
+    console.log('Started server on port ' + port);
 });

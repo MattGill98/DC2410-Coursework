@@ -5,8 +5,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node .",
+    "test": "mocha",
     "mongo": "mongod --dbpath ./mongodata --logpath ./mongodata/mongo.log",
-    "test": "mocha"
+    "heroku-postbuild": "cd client/ && npm install && npm run build"
   },
   "repository": {
     "type": "git",
