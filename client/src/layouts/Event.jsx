@@ -1,6 +1,7 @@
 import { subscribe, unsubscribe } from 'actions/eventActions';
 import { deleteEvent, fetchEvent } from 'actions/eventActions.js';
 import ButtonBar from 'components/ButtonBar.jsx';
+import reactLogo from 'images/logo.svg';
 import ErrorAlert from 'components/ErrorAlert.jsx';
 import LoadingButton from 'components/LoadingButton.jsx';
 import dateFormat from 'dateformat';
@@ -28,6 +29,13 @@ const mapStateToProps = state => {
     };
 };
 
+const EventPicture = ({src, alt, exists}) => {
+    if (exists === false) {
+        src = reactLogo;
+    }
+    return <img className="col-lg-10 col-md-12" style={{margin: 'auto'}} src={src} alt={alt} />
+};
+
 const EventData = ({ eventData, visible }) => {
     if (visible === false) {
         return null;
@@ -36,17 +44,17 @@ const EventData = ({ eventData, visible }) => {
         <div style={{textAlign: 'center'}}>
             <h1>{eventData.name}</h1>
             <Row>
-                <img style={{margin: 'auto'}} className="col-lg-10 col-md-12" src={'/api/event/' + eventData._id + '/picture'} alt={eventData.name} />
+                <EventPicture src={'/api/event/' + eventData._id + '/picture'} alt={eventData.name} exists={eventData.picture} />
             </Row>
             <Row>
                 <div style={{margin: 'auto'}} className="mt-3 col-lg-10 col-md-12">
                     <table className="table table-bordered">
                         <tbody>
-                            <tr><td className="col-2">Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
-                            <tr><td className="col-2">Category</td><td>{titlecase(eventData.category)}</td></tr>
-                            <tr><td className="col-2">Venue</td><td>{titlecase(eventData.venue)}</td></tr>
-                            <tr><td className="col-2">Organiser</td><td>{eventData.organiser}</td></tr>
-                            <tr><td className="col-2">Description</td><td>{eventData.description}</td></tr>
+                            <tr><td className="col-sm-2">Date</td><td>{dateFormat(eventData.date, 'dS mmmm yyyy')}</td></tr>
+                            <tr><td className="col-sm-2">Category</td><td>{titlecase(eventData.category)}</td></tr>
+                            <tr><td className="col-sm-2">Venue</td><td>{titlecase(eventData.venue)}</td></tr>
+                            <tr><td className="col-sm-2">Organiser</td><td>{eventData.organiser}</td></tr>
+                            <tr><td className="col-sm-2">Description</td><td>{eventData.description}</td></tr>
                         </tbody>
                     </table>
                 </div>
