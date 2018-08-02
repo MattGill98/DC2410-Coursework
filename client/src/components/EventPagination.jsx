@@ -14,10 +14,13 @@ const mapDispatchToProps = dispatch => ({
     previousPage: () => { dispatch(previousPage()) },
 });
 
-const PageLink = ({ text, currentPage, onClick }) => {
+const PageLink = ({ text, currentPage, enabled, onClick }) => {
     var className = "";
     if (text === currentPage) {
         className = "active";
+    }
+    if (enabled === false) {
+        className += " disabled";
     }
     return (
         <li class={"page-item " + className}>
@@ -32,11 +35,11 @@ const EventPagination = ({ pages, currentPage, previousPage, nextPage, setPage }
     }
     return (
         <ul class="pagination justify-content-center mt-3">
-            <PageLink text="&laquo;" onClick={e => previousPage()} />
+            <PageLink text="&laquo;" enabled={currentPage > 0} onClick={e => previousPage()} />
             {
-                [...Array(pages)].map((e, i) => <PageLink text={i + 1} currentPage={currentPage + 1} onClick={e => setPage(i)} />)
+                [...Array(pages)].map((e, i) => <PageLink text={i + 1} enabled={i != currentPage} currentPage={currentPage + 1} onClick={e => setPage(i)} />)
             }
-            <PageLink text="&raquo;" onClick={e => nextPage()} />
+            <PageLink text="&raquo;" enabled={currentPage + 1 < pages} onClick={e => nextPage()} />
         </ul>
     );
 };
