@@ -1,8 +1,9 @@
 import { FETCH_EVENTS_BEGIN, FETCH_EVENTS_FAILURE, FETCH_EVENTS_SUCCESS, FILTER_EVENTS, REVERSE_SORT_ORDER, SORT_EVENTS } from 'actions/eventListActions.js';
+import { SET_PAGE } from '../actions/eventListActions';
 
 const initialState = {
     items: [],
-    itemCount: 0,
+    pageCount: 1,
     currentPage: 0,
     pageOffset: 6,
 
@@ -28,14 +29,14 @@ export default (state = initialState, action) => {
                 ...state,
                 fetching: false,
                 items: action.payload.data,
-                itemCount: action.payload.count
+                pageCount: Math.ceil(action.payload.count / initialState.pageOffset)
             };
         case FETCH_EVENTS_FAILURE:
             return {
                 ...state,
                 fetching: false,
                 items: [],
-                itemCount: 0,
+                pageCount: 1,
                 fetchingError: action.payload
             };
 
@@ -67,8 +68,14 @@ export default (state = initialState, action) => {
         case REVERSE_SORT_ORDER:
             return {
                 ...state,
-                sortOrder : !state.sortOrder
+                sortOrder: !state.sortOrder
             }
+
+        case SET_PAGE:
+            return {
+                ...state,
+                currentPage: action.payload
+            };
         default:
             return state;
     }

@@ -14,7 +14,7 @@ import { Button, Col, Row } from 'reactstrap';
 const mapStateToProps = state => {
     return {
         events: state.EventList.items,
-        eventCount: state.EventList.itemCount,
+        pageCount: state.EventList.pageCount,
         fetching: state.EventList.fetching,
         fetchingError: state.EventList.fetchingError,
         role: state.User.role
@@ -44,7 +44,7 @@ class EventList extends React.Component {
     }
 
     render() {
-        const { events, eventCount, fetching, fetchingError, role } = this.props;
+        const { events, pageCount, fetching, fetchingError, role } = this.props;
 
         return (
             <div>
@@ -60,7 +60,7 @@ class EventList extends React.Component {
 
                 <EventGrid events={events} />
 
-                <EventPagination style={{'margin': 'auto'}} pages={Math.ceil(eventCount / 6)} />
+                <EventPagination style={{'margin': 'auto'}} pages={pageCount} />
             </div>
         );
     }

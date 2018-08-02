@@ -8,6 +8,8 @@ export const FILTER_EVENTS = 'FILTER_EVENTS';
 export const SORT_EVENTS = 'SORT_EVENTS';
 export const REVERSE_SORT_ORDER = 'REVERSE_SORT_ORDER';
 
+export const SET_PAGE = 'SET_PAGE';
+
 const fetchEventsBegin = () => ({
     type: FETCH_EVENTS_BEGIN
 });
@@ -31,6 +33,11 @@ const sortEventState = (sortString) => ({
 });
 const sortOrderReversal = () => ({
     type: REVERSE_SORT_ORDER
+});
+
+const setPage = (pageNumber) => ({
+    type: SET_PAGE,
+    payload: pageNumber
 });
 
 export function fetchEvents() {
@@ -98,5 +105,31 @@ export function reverseSortOrder() {
     return dispatch => {
         dispatch(sortOrderReversal());
         dispatch(fetchEvents());
+    };
+}
+
+
+export function changePage(pageNumber) {
+    return dispatch => {
+        dispatch(setPage(pageNumber));
+        dispatch(fetchEvents());
+    };
+}
+
+export function nextPage() {
+    return (dispatch, getState) => {
+        if (getState().EventList.currentPage + 1 < getState().EventList.pageCount) {
+            dispatch(setPage(getState().EventList.currentPage + 1));
+            dispatch(fetchEvents());
+        }
+    };
+}
+
+export function previousPage() {
+    return (dispatch, getState) => {
+        if (getState().EventList.currentPage > 0) {
+            dispatch(setPage(getState().EventList.currentPage - 1));
+            dispatch(fetchEvents());
+        }
     };
 }
