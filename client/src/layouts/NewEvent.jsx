@@ -32,7 +32,7 @@ class NewEvent extends React.Component {
     render() {
         const { creationError, created, creating } = this.props;
 
-        const nonNullError = (creationError)? creationError : {};
+        const errorList = (creationError && creationError.errors)? creationError.errors : {};
 
         if (created === true) {
             return <Redirect to='/events' />
@@ -44,67 +44,67 @@ class NewEvent extends React.Component {
 
         return (
             <div>
-                <ErrorAlert error={nonNullError.message} id="creationErrorAlert" />
+                <ErrorAlert error={creationError == null? null: creationError.message} id="creationErrorAlert" />
                 <Button outline color="secondary" tag={Link} to="/events">All Events</Button>
                 <Row>
                     <Col sm="4">
                         <Form onSubmit={this.startCreate} id="eventForm">
                             <FormGroup>
                                 <Label for="name">Event Name</Label>
-                                <Input invalid={nonNullError.name} type="text" name="name" required />
+                                <Input invalid={errorList.name} type="text" name="name" required />
                                 <FormFeedback>{
-                                    nonNullError.name == null ?
+                                    errorList.name == null ?
                                         "Invalid name" :
-                                        nonNullError.name.message}
+                                        errorList.name.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="category">Event Category</Label>
-                                <Input invalid={nonNullError.category} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
+                                <Input invalid={errorList.category} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
                                     <option>sport</option>
                                     <option>culture</option>
                                     <option>other</option>
                                 </Input>
                                 <FormFeedback>{
-                                    nonNullError.category == null ?
+                                    errorList.category == null ?
                                         "Invalid category" :
-                                        nonNullError.category.message}
+                                        errorList.category.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="description">Description</Label>
-                                <Input invalid={nonNullError.description} type="text" name="description" />
+                                <Input invalid={errorList.description} type="text" name="description" />
                                 <FormFeedback>{
-                                    nonNullError.description == null ?
+                                    errorList.description == null ?
                                         "Invalid description" :
-                                        nonNullError.description.message}
+                                        errorList.description.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="date">Date</Label>
-                                <Input invalid={nonNullError.date} type="date" name="date" required />
+                                <Input invalid={errorList.date} type="date" name="date" required />
                                 <FormFeedback>{
-                                    nonNullError.date == null ?
+                                    errorList.date == null ?
                                         "Invalid date" :
-                                        nonNullError.date.message}
+                                        errorList.date.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="venue">Venue</Label>
-                                <Input invalid={nonNullError.venue} type="text" name="venue" required />
+                                <Input invalid={errorList.venue} type="text" name="venue" required />
                                 <FormFeedback>{
-                                    nonNullError.venue == null ?
+                                    errorList.venue == null ?
                                         "Invalid venue" :
-                                        nonNullError.venue.message}
+                                        errorList.venue.message}
                                 </FormFeedback>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="picture">Picture</Label>
-                                <Input invalid={nonNullError.picture} type="file" name="picture" />
+                                <Input invalid={errorList.picture} type="file" name="picture" />
                                 <FormFeedback>{
-                                    nonNullError.picture == null ?
+                                    errorList.picture == null ?
                                         "Invalid picture" :
-                                        nonNullError.picture.message}
+                                        errorList.picture.message}
                                 </FormFeedback>
                             </FormGroup>
                             <input type="hidden" name="organiser" value="Matt Gill" />

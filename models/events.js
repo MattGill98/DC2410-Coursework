@@ -1,5 +1,6 @@
-const sanitizeHTML = require('sanitize-html');
 const fs = require('fs');
+const readChunk = require('read-chunk');
+const fileType = require('file-type');
 
 module.exports = function (mongoose) {
 
@@ -7,12 +8,28 @@ module.exports = function (mongoose) {
     const grid = require('gridfs-stream');
     grid.mongo = mongoose.mongo;
 
+    function validatePicture(image, callback) {
+        if (image === null) return callback(null, true);
+        readChunk(image, 0, 4100).then(buffer => {
+            if (!buffer) throw 'Error reading file.';
+
+            const type = fileType(buffer);
+
+            if (!type || !type.mime.includes('image')) throw 'File wasn\'t image.';
+
+            callback(null, true);
+        }).catch(err => {
+            callback(err);
+        });
+    }
+
     function createPicture (id, image, callback) {
         const gfs = grid(mongoose.connection.db);
+
         var writeStream = gfs.createWriteStream({filename: id});
         fs.createReadStream(image).pipe(writeStream);
         writeStream.on('close', file => {
-            callback(null, file.filename);
+            callback(null, true);
         });
     }
 
@@ -99,23 +116,27 @@ module.exports = function (mongoose) {
 
             var event = new Event(from);
 
-            event.save((err, createdEvent) => {
-                if (err) return callback(err, createdEvent);
+            validatePicture(picturePath, (err, pictureValid) => {
+                if (err) return callback({errors: {picture: {message: err}}});
 
-                if (picturePath) {
-                    createPicture(createdEvent.id, picturePath, (err, createdPicture) => {
-                        if (err) return callback(err, createdEvent);
-
-                        createdEvent.picture = true;
-                        Event.findByIdAndUpdate(createdEvent.id, createdEvent, {new: true}, (err, updatedEvent) => {
-                            if (err) return callback(err, updatedEvent);
-
-                            callback(null, updatedEvent);
+                event.save((err, createdEvent) => {
+                    if (err) return callback(err, createdEvent);
+    
+                    if (picturePath) {
+                        createPicture(createdEvent.id, picturePath, (err, createdPicture) => {
+                            if (err) return callback(err, createdEvent);
+    
+                            createdEvent.picture = true;
+                            Event.findByIdAndUpdate(createdEvent.id, createdEvent, {new: true}, (err, updatedEvent) => {
+                                if (err) return callback(err, updatedEvent);
+    
+                                callback(null, updatedEvent);
+                            });
                         });
-                    });
-                } else {
-                    return callback(null, from);
-                }
+                    } else {
+                        return callback(null, from);
+                    }
+                });
             });
         },
         read: function (id, callback) {
