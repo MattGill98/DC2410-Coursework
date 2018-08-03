@@ -1,9 +1,9 @@
-import React from 'react';
 import { createEvent } from 'actions/eventActions.js';
-import { Link, Redirect } from "react-router-dom";
-import { connect } from 'react-redux';
-import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap';
 import ErrorAlert from 'components/ErrorAlert.jsx';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link, Redirect } from "react-router-dom";
+import { Button, Col, Form, FormFeedback, FormGroup, Input, Label, Row } from 'reactstrap';
 
 const mapStateToProps = state => {
     return {

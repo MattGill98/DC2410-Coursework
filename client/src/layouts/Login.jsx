@@ -1,7 +1,7 @@
 import { login, resetError } from 'actions/userActions.js';
+import ButtonBar from 'components/ButtonBar.jsx';
 import ErrorAlert from 'components/ErrorAlert.jsx';
 import React from 'react';
-import ButtonBar from 'components/ButtonBar.jsx';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';

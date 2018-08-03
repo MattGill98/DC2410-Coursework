@@ -5,6 +5,7 @@ import EventList from 'layouts/EventList.jsx';
 import Login from 'layouts/Login.jsx';
 import NewEvent from 'layouts/NewEvent.jsx';
 import Register from 'layouts/Register.jsx';
+import Welcome from 'layouts/Welcome.jsx';
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -34,7 +35,7 @@ class App extends Component {
                                 <Route exact path="/events" component={EventList} />
                                 <Route exact path="/login" component={Login} />
                                 <Route exact path="/register" component={Register} />
-                                <Route exact path="/" component={EventList} />
+                                <Route exact path="/" component={Welcome} />
                             </Switch>
                         </Container>
                     </div>

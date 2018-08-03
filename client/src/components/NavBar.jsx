@@ -16,6 +16,12 @@ function NavItems(props) {
         return (
             <Nav className="ml-auto" navbar>
                 <NavItem>
+                    <NavLink tag={Link} to="/">Home</NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} to="/events">Events</NavLink>
+                </NavItem>
+                <NavItem>
                     <NavLink tag={Link} to="/register">Register</NavLink>
                 </NavItem>
                 <NavItem>
@@ -27,6 +33,12 @@ function NavItems(props) {
 
     return (
         <Nav className="ml-auto" navbar>
+            <NavItem>
+                <NavLink tag={Link} to="/">Home</NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink tag={Link} to="/events">Events</NavLink>
+            </NavItem>
             <NavItem>
                 <NavLink tag={Link} to="/" onClick={e => {props.dispatch(logout())}}>Logout</NavLink>
             </NavItem>
