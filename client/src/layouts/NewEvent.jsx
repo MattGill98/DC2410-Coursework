@@ -60,7 +60,7 @@ class NewEvent extends React.Component {
                             </FormGroup>
                             <FormGroup>
                                 <Label for="category">Event Category</Label>
-                                <Input invalid={errorList.category} type="select" name="category" required defaultValue="" onChange={this.handleFieldChange}>
+                                <Input invalid={errorList.category} type="select" name="category" required defaultValue="">
                                     <option>sport</option>
                                     <option>culture</option>
                                     <option>other</option>
@@ -107,7 +107,6 @@ class NewEvent extends React.Component {
                                         errorList.picture.message}
                                 </FormFeedback>
                             </FormGroup>
-                            <input type="hidden" name="organiser" value="Matt Gill" />
                             <Button outline color="success" type="submit">Create</Button>
                         </Form>
                     </Col>

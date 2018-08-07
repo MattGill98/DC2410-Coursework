@@ -23,14 +23,6 @@ module.exports = function (Event) {
         });
     })
 
-    // Delete all events
-    router.delete("/events", (request, response) => {
-        Event.deleteAll((err, res) => {
-            if (err) return response.status(500).send({message: 'Error deleting events.'});
-            response.send(res);
-        });
-    });
-
     // Register
     router.post('/register', (req, res, next) => {
         req.body.username = req.sanitize(req.body.username);

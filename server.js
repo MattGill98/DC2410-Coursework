@@ -57,9 +57,6 @@ app.use('/api', require('./routes/public.js')(Event));
 app.use('/api', require('./routes/member.js')(Event));
 app.use('/api', require('./routes/student.js')(Event));
 app.use('/api', require('./routes/organiser.js')(Event));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'));
-});
 
 module.exports = app;
 
@@ -78,3 +75,15 @@ app.delete('/api/users', (request, response) => {
         response.send(res);
     });
 })
+
+// Delete all events
+app.delete("/api/events", (request, response) => {
+    Event.deleteAll((err, res) => {
+        if (err) return response.status(500).send({message: 'Error deleting events.'});
+        response.send(res);
+    });
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});

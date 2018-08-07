@@ -138,6 +138,12 @@ class Event extends React.Component {
                 <GridLoader color={'#95A09E'} loaderStyle={{'margin': 'auto'}} loading={fetching} />
 
                 <EventData eventData={eventData} visible={!fetching} />
+
+                <Row>
+                    <Col md="12" lg="10" style={{ margin: 'auto' }}>
+                        <Button outline block color="warning" tag={Link} to={'/event/' + eventData._id + '/update'}>Update</Button>
+                    </Col>
+                </Row>
             </div>
         );
     }

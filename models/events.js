@@ -195,6 +195,24 @@ module.exports = function (mongoose) {
         update: function (id, updatedMessage, callback) {
             Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);
         },
+        patch: function (id, updatedEvent, callback) {
+            if ("name" in updatedEvent && !updatedEvent.name) {
+                return callback({errors: {name: {message: "An event requires a name."}}});
+            }
+            if ("category" in updatedEvent && !updatedEvent.category) {
+                return callback({errors: {name: {message: "An event requires a category."}}});
+            }
+            if ("date" in updatedEvent && !updatedEvent.date) {
+                return callback({errors: {name: {message: "An event requires a date."}}});
+            }
+            if ("organiser" in updatedEvent && !updatedEvent.organiser) {
+                return callback({errors: {name: {message: "An event requires a organiser."}}});
+            }
+            if ("venue" in updatedEvent && !updatedEvent.venue) {
+                return callback({errors: {name: {message: "An event requires a venue."}}});
+            }
+            Event.findOneAndUpdate({_id: id}, {$set: updatedEvent}, {new: true}, callback);
+        },
         delete: function (id, callback) {
             Event.remove({ _id: id }, (err, res) => {
                 if (err) return callback(err);

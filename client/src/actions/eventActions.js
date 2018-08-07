@@ -153,21 +153,25 @@ export function updateEvent(formData) {
     return (dispatch, getState) => {
 
         var data = {};
-        if (getState().Event.eventData.name !== formData.name) data.name = formData.name;
-        if (getState().Event.eventData.category !== formData.category) data.category = formData.category;
-        if (getState().Event.eventData.description !== formData.description) data.description = formData.description;
-        if (getState().Event.eventData.date !== formData.date) data.date = formData.date;
-        if (getState().Event.eventData.venue !== formData.venue) data.venue = formData.venue;
+        if (formData.get('name') !== getState().Event.eventData.name) data.name = formData.get('name');
+        if (formData.get('category') !== getState().Event.eventData.category) data.category = formData.get('category');
+        if (formData.get('description') !== getState().Event.eventData.description) data.description = formData.get('description');
+        if (new Date(formData.get('date')).valueOf() !== new Date(getState().Event.eventData.date).valueOf()) data.date = formData.get('date');
+        if (formData.get('venue') !== getState().Event.eventData.venue) data.venue = formData.get('venue');
+
+        formData = new FormData();
+        for (var key in data) {
+            formData.append(key, data[key]);
+        }
 
         dispatch(updateEventBegin());
-        fetch('/api/events/',
+        fetch('/api/event/' + getState().Event.eventData._id,
                 {
                     method: 'PATCH',
-                    mode: 'no-cors',
                     headers: {
                         'Accept': 'application/json'
                     },
-                    body: data
+                    body: formData
                 })
             .then(res => {
                 if (!res.ok) {

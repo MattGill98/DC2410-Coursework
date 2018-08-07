@@ -4,6 +4,7 @@ import Event from 'layouts/Event.jsx';
 import EventList from 'layouts/EventList.jsx';
 import Login from 'layouts/Login.jsx';
 import NewEvent from 'layouts/NewEvent.jsx';
+import UpdateEvent from 'layouts/UpdateEvent.jsx';
 import Register from 'layouts/Register.jsx';
 import Welcome from 'layouts/Welcome.jsx';
 import React, { Component } from 'react';
@@ -31,6 +32,7 @@ class App extends Component {
                         <Container fluid={false}>
                             <Switch>
                                 <Route exact path="/event/:id" component={Event} />
+                                <Route exact path="/event/:id/update" component={UpdateEvent} />
                                 <Route exact path="/events/new" component={NewEvent} />
                                 <Route exact path="/events" component={EventList} />
                                 <Route exact path="/login" component={Login} />
