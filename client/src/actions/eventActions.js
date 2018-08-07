@@ -10,6 +10,10 @@ export const CREATE_EVENT_BEGIN = 'CREATE_EVENT_BEGIN';
 export const CREATE_EVENT_SUCCESS = 'CREATE_EVENT_SUCCESS';
 export const CREATE_EVENT_FAILURE = 'CREATE_EVENT_FAILURE';
 
+export const UPDATE_EVENT_BEGIN = 'UPDATE_EVENT_BEGIN';
+export const UPDATE_EVENT_SUCCESS = 'UPDATE_EVENT_SUCCESS';
+export const UPDATE_EVENT_FAILURE = 'UPDATE_EVENT_FAILURE';
+
 export const SUBSCRIBE_BEGIN = 'SUBSCRIBE_BEGIN';
 export const SUBSCRIBE_SUCCESS = 'SUBSCRIBE_SUCCESS';
 export const UNSUBSCRIBE_SUCCESS = 'UNSUBSCRIBE_SUCCESS';
@@ -46,6 +50,17 @@ export const createEventSuccess = () => ({
 });
 export const createEventFailure = (error) => ({
     type: CREATE_EVENT_FAILURE,
+    payload: error
+});
+
+export const updateEventBegin = () => ({
+    type: UPDATE_EVENT_BEGIN
+});
+export const updateEventSuccess = () => ({
+    type: UPDATE_EVENT_SUCCESS
+});
+export const updateEventFailure = (error) => ({
+    type: UPDATE_EVENT_FAILURE,
     payload: error
 });
 
@@ -131,6 +146,40 @@ export function createEvent(data) {
                 return res;
             })
             .catch(res => res.json().then(err => dispatch(createEventFailure(err))));
+    };
+}
+
+export function updateEvent(formData) {
+    return (dispatch, getState) => {
+
+        var data = {};
+        if (getState().Event.eventData.name !== formData.name) data.name = formData.name;
+        if (getState().Event.eventData.category !== formData.category) data.category = formData.category;
+        if (getState().Event.eventData.description !== formData.description) data.description = formData.description;
+        if (getState().Event.eventData.date !== formData.date) data.date = formData.date;
+        if (getState().Event.eventData.venue !== formData.venue) data.venue = formData.venue;
+
+        dispatch(updateEventBegin());
+        fetch('/api/events/',
+                {
+                    method: 'PATCH',
+                    mode: 'no-cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    body: data
+                })
+            .then(res => {
+                if (!res.ok) {
+                    throw res;
+                }
+                return res.json();
+            })
+            .then(res => {
+                dispatch(updateEventSuccess());
+                return res;
+            })
+            .catch(res => res.json().then(err => dispatch(updateEventFailure(err))));
     };
 }
 

@@ -1,4 +1,4 @@
-import { CREATE_EVENT_BEGIN, CREATE_EVENT_FAILURE, CREATE_EVENT_SUCCESS, DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS, SUBSCRIBE_BEGIN, SUBSCRIBE_FAILURE, SUBSCRIBE_SUCCESS, UNSUBSCRIBE_SUCCESS } from 'actions/eventActions.js';
+import { CREATE_EVENT_BEGIN, CREATE_EVENT_FAILURE, CREATE_EVENT_SUCCESS, UPDATE_EVENT_BEGIN, UPDATE_EVENT_FAILURE, UPDATE_EVENT_SUCCESS, DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS, SUBSCRIBE_BEGIN, SUBSCRIBE_FAILURE, SUBSCRIBE_SUCCESS, UNSUBSCRIBE_SUCCESS } from 'actions/eventActions.js';
 
 const initialState = {
     eventData: {},
@@ -13,6 +13,10 @@ const initialState = {
     creating: false,
     created: false,
     creationError: null,
+
+    updating: false,
+    updated: false,
+    updateError: null,
 
     subscribing: false,
     subscribed: false,
@@ -82,6 +86,28 @@ export default (state = initialState, action) => {
                 creating: false,
                 created: false,
                 creationError: action.payload
+            };
+
+        case UPDATE_EVENT_BEGIN:
+            return {
+                ...state,
+                updating: true,
+                updated: false,
+                updateError: null
+            };
+        case UPDATE_EVENT_SUCCESS:
+            return {
+                ...state,
+                updating: false,
+                updated: true,
+                updateError: null
+            };
+        case UPDATE_EVENT_FAILURE:
+            return {
+                ...state,
+                updating: false,
+                updated: false,
+                updateError: action.payload
             };
 
         case SUBSCRIBE_BEGIN:
