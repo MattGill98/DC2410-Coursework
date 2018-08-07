@@ -149,20 +149,17 @@ export function createEvent(data) {
     };
 }
 
-export function updateEvent(formData) {
+export function updateEvent(data) {
     return (dispatch, getState) => {
 
-        var data = {};
-        if (formData.get('name') !== getState().Event.eventData.name) data.name = formData.get('name');
-        if (formData.get('category') !== getState().Event.eventData.category) data.category = formData.get('category');
-        if (formData.get('description') !== getState().Event.eventData.description) data.description = formData.get('description');
-        if (new Date(formData.get('date')).valueOf() !== new Date(getState().Event.eventData.date).valueOf()) data.date = formData.get('date');
-        if (formData.get('venue') !== getState().Event.eventData.venue) data.venue = formData.get('venue');
-
-        formData = new FormData();
-        for (var key in data) {
-            formData.append(key, data[key]);
+        var formData = new FormData();
+        for (var key of data.keys()) {
+            if (data.get(key) && data.get(key) !== getState().Event.eventData[key]) {
+                formData.append(key, data.get(key));
+            }
         }
+
+        dispatch();
 
         dispatch(updateEventBegin());
         fetch('/api/event/' + getState().Event.eventData._id,

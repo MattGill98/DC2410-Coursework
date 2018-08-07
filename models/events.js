@@ -59,6 +59,13 @@ module.exports = function (mongoose) {
         });
     }
 
+    function updatePicture (id, image, callback) {
+        deletePicture(id, (err, res) => {
+            if (err) return callback(err);
+            createPicture(id, image, callback);
+        });
+    }
+
     function deleteAllPictures(callback) {
         const gfs = grid(mongoose.connection.db);
         gfs.files.remove({}, callback);
@@ -192,8 +199,8 @@ module.exports = function (mongoose) {
 
             Event.count(conditions, callback);
         },
-        update: function (id, updatedMessage, callback) {
-            Event.findOneAndUpdate({_id: id}, updatedMessage, {new: true}, callback);
+        update: function (id, updatedEvent, callback) {
+            Event.findOneAndUpdate({_id: id}, updatedEvent, {new: true}, callback);
         },
         patch: function (id, updatedEvent, callback) {
             if ("name" in updatedEvent && !updatedEvent.name) {
@@ -211,7 +218,32 @@ module.exports = function (mongoose) {
             if ("venue" in updatedEvent && !updatedEvent.venue) {
                 return callback({errors: {name: {message: "An event requires a venue."}}});
             }
-            Event.findOneAndUpdate({_id: id}, {$set: updatedEvent}, {new: true}, callback);
+
+            var picturePath = (updatedEvent.picture == null) ? null : updatedEvent.picture.path;
+            updatedEvent.picture = false;
+
+            validatePicture(picturePath, (err, pictureValid) => {
+                if (err) return callback({errors: {picture: {message: err}}});
+
+                Event.findOneAndUpdate({_id: id}, {$set: updatedEvent}, {new: true}, (err, createdEvent) => {
+                    if (err) return callback(err, createdEvent);
+
+                    if (picturePath) {
+                        updatePicture(id, picturePath, (err, createdPicture) => {
+                            if (err) return callback(err, createdEvent);
+    
+                            createdEvent.picture = true;
+                            Event.findByIdAndUpdate(createdEvent.id, createdEvent, {new: true}, (err, updatedEvent) => {
+                                if (err) return callback(err, updatedEvent);
+    
+                                callback(null, updatedEvent);
+                            });
+                        });
+                    } else {
+                        return callback(null, createdEvent);
+                    }
+                });
+            });
         },
         delete: function (id, callback) {
             Event.remove({ _id: id }, (err, res) => {

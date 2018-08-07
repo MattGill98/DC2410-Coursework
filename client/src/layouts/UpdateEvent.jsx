@@ -83,6 +83,15 @@ const EventData = ({ updateEvent, eventData, visible, updateError }) => {
                                     errorList.venue.message}
                             </FormFeedback>
                         </FormGroup>
+                        <FormGroup>
+                            <Label for="picture">Picture</Label>
+                            <Input invalid={errorList.picture} type="file" name="picture" />
+                            <FormFeedback>{
+                                errorList.picture == null ?
+                                    "Invalid picture" :
+                                    errorList.picture.message}
+                            </FormFeedback>
+                        </FormGroup>
                         <Button outline color="warning" type="submit">Update</Button>
                     </Form>
                 </Col>

@@ -42,7 +42,9 @@ module.exports = function (Event) {
 
     router.patch('/event/:id', (request, response, next) => {
         for (var key in request.body) {
-            request.body[key] = request.sanitize(request.body[key]);
+            if (key !== 'picture') {
+                request.body[key] = request.sanitize(request.body[key]);
+            }
         }
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
