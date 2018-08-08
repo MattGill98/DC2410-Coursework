@@ -203,6 +203,7 @@ module.exports = function (mongoose) {
             Event.findOneAndUpdate({_id: id}, updatedEvent, {new: true}, callback);
         },
         patch: function (id, updatedEvent, callback) {
+            // If any properties are present but null
             if ("name" in updatedEvent && !updatedEvent.name) {
                 return callback({errors: {name: {message: "An event requires a name."}}});
             }
@@ -219,29 +220,34 @@ module.exports = function (mongoose) {
                 return callback({errors: {name: {message: "An event requires a venue."}}});
             }
 
-            var picturePath = (updatedEvent.picture == null) ? null : updatedEvent.picture.path;
-            updatedEvent.picture = false;
+            Event.findById(id, (err, res) => {
+                if (err) return callback(err);
+                if (!res) return callback({message: 'Event not found.'});
 
-            validatePicture(picturePath, (err, pictureValid) => {
-                if (err) return callback({errors: {picture: {message: err}}});
-
-                Event.findOneAndUpdate({_id: id}, {$set: updatedEvent}, {new: true}, (err, createdEvent) => {
-                    if (err) return callback(err, createdEvent);
-
-                    if (picturePath) {
-                        updatePicture(id, picturePath, (err, createdPicture) => {
-                            if (err) return callback(err, createdEvent);
+                var picturePath = (updatedEvent.picture == null) ? null : updatedEvent.picture.path;
+                updatedEvent.picture = res.picture;
     
-                            createdEvent.picture = true;
-                            Event.findByIdAndUpdate(createdEvent.id, createdEvent, {new: true}, (err, updatedEvent) => {
-                                if (err) return callback(err, updatedEvent);
+                validatePicture(picturePath, (err, pictureValid) => {
+                    if (err) return callback({errors: {picture: {message: err}}});
     
-                                callback(null, updatedEvent);
+                    Event.findOneAndUpdate({_id: id}, {$set: updatedEvent}, {new: true}, (err, createdEvent) => {
+                        if (err) return callback(err, createdEvent);
+    
+                        if (picturePath) {
+                            updatePicture(id, picturePath, (err, createdPicture) => {
+                                if (err) return callback(err, createdEvent);
+        
+                                createdEvent.picture = true;
+                                Event.findByIdAndUpdate(createdEvent.id, createdEvent, {new: true}, (err, updatedEvent) => {
+                                    if (err) return callback(err, updatedEvent);
+        
+                                    callback(null, updatedEvent);
+                                });
                             });
-                        });
-                    } else {
-                        return callback(null, createdEvent);
-                    }
+                        } else {
+                            return callback(null, createdEvent);
+                        }
+                    });
                 });
             });
         },
