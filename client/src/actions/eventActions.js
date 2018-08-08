@@ -19,6 +19,8 @@ export const SUBSCRIBE_SUCCESS = 'SUBSCRIBE_SUCCESS';
 export const UNSUBSCRIBE_SUCCESS = 'UNSUBSCRIBE_SUCCESS';
 export const SUBSCRIBE_FAILURE = 'SUBSCRIBE_FAILURE';
 
+export const RELOAD_EVENT = 'RELOAD_EVENT';
+
 export const fetchEventBegin = () => ({
     type: FETCH_EVENT_BEGIN
 });
@@ -78,6 +80,10 @@ export const unsubscribeSuccess = (data) => ({
 export const subscribeFailure = (error) => ({
     type: SUBSCRIBE_FAILURE,
     payload: error
+});
+
+export const reloadEvent = () => ({
+    type: RELOAD_EVENT
 });
 
 export function fetchEvent(eventID) {
@@ -159,8 +165,6 @@ export function updateEvent(data) {
             }
         }
 
-        dispatch();
-
         dispatch(updateEventBegin());
         fetch('/api/event/' + getState().Event.eventData._id,
                 {
@@ -173,6 +177,9 @@ export function updateEvent(data) {
             .then(res => {
                 if (!res.ok) {
                     throw res;
+                }
+                if (data.get('picture')) {
+                    dispatch(reloadEvent());
                 }
                 return res.json();
             })

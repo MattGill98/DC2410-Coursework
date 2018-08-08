@@ -15,6 +15,7 @@ import titlecase from 'title-case';
 const mapStateToProps = state => {
     return {
         eventData: state.Event.eventData,
+        reloadEvent: state.Event.reloadEvent,
 
         fetching: state.Event.fetching,
         fetchError: state.Event.fetchError,
@@ -90,7 +91,12 @@ class Event extends React.Component {
     }
 
     render() {
-        const { eventData, fetching, fetchError, deleted, deleting, deletionError, subscribing, subscribed, subscriptionError } = this.props;
+        const { eventData, reloadEvent, fetching, fetchError, deleted, deleting, deletionError, subscribing, subscribed, subscriptionError } = this.props;
+
+        if (reloadEvent) {
+            window.location.reload(true);
+            return null;
+        }
 
         if (fetchError) {
             return <div>{fetchError}</div>

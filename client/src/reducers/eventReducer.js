@@ -1,7 +1,8 @@
-import { CREATE_EVENT_BEGIN, CREATE_EVENT_FAILURE, CREATE_EVENT_SUCCESS, UPDATE_EVENT_BEGIN, UPDATE_EVENT_FAILURE, UPDATE_EVENT_SUCCESS, DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS, SUBSCRIBE_BEGIN, SUBSCRIBE_FAILURE, SUBSCRIBE_SUCCESS, UNSUBSCRIBE_SUCCESS } from 'actions/eventActions.js';
+import { RELOAD_EVENT, CREATE_EVENT_BEGIN, CREATE_EVENT_FAILURE, CREATE_EVENT_SUCCESS, UPDATE_EVENT_BEGIN, UPDATE_EVENT_FAILURE, UPDATE_EVENT_SUCCESS, DELETE_EVENT_BEGIN, DELETE_EVENT_FAILURE, DELETE_EVENT_SUCCESS, FETCH_EVENT_BEGIN, FETCH_EVENT_FAILURE, FETCH_EVENT_SUCCESS, SUBSCRIBE_BEGIN, SUBSCRIBE_FAILURE, SUBSCRIBE_SUCCESS, UNSUBSCRIBE_SUCCESS } from 'actions/eventActions.js';
 
 const initialState = {
     eventData: {},
+    reloadEvent: false,
 
     fetching: false,
     fetchError: null,
@@ -42,6 +43,11 @@ export default (state = initialState, action) => {
                 fetching: false,
                 fetchError: action.payload,
                 eventData: {}
+            };
+        case RELOAD_EVENT:
+            return {
+                ...state,
+                reloadEvent: true
             };
         
         case DELETE_EVENT_BEGIN:
