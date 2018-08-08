@@ -175,6 +175,9 @@ paths:
                   type: string
                 venue:
                   type: string
+                picture:
+                  type: string
+                  format: binary
       responses:
         200:
           $ref: "#/components/responses/SingleEvent"
@@ -349,6 +352,11 @@ components:
                       message:
                         type: string
                   venue:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                  picture:
                     type: object
                     properties:
                       message:
