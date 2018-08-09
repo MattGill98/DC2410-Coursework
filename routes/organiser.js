@@ -52,7 +52,7 @@ module.exports = function (Event) {
 
             if (user.role != 'organiser') return response.status(403).send({message: 'Role must be \'organiser\' to update events.'});
 
-            Event.findById(request.params.id, (err, res) => {
+            Event.read(request.params.id, (err, res) => {
                 if (err) return response.status(500).send(err);
                 if (!res) return response.status(404).send({message: 'Event didn\'t exist.'});
 
