@@ -26,7 +26,9 @@ const mapStateToProps = state => {
 
         subscribing: state.Event.subscribing,
         subscribed: state.Event.subscribed,
-        subscriptionError: state.Event.subscriptionError
+        subscriptionError: state.Event.subscriptionError,
+
+        role: state.User.role
     };
 };
 
@@ -91,15 +93,11 @@ class Event extends React.Component {
     }
 
     render() {
-        const { eventData, reloadEvent, fetching, fetchError, deleted, deleting, deletionError, subscribing, subscribed, subscriptionError } = this.props;
+        const { eventData, reloadEvent, fetching, fetchError, deleted, deleting, deletionError, subscribing, subscribed, subscriptionError, role } = this.props;
 
         if (reloadEvent) {
             window.location.reload(true);
             return null;
-        }
-
-        if (fetchError) {
-            return <div>{fetchError}</div>
         }
 
         if (deleted === true) {
@@ -147,7 +145,9 @@ class Event extends React.Component {
 
                 <Row>
                     <Col md="12" lg="10" style={{ margin: 'auto' }}>
-                        <Button outline block color="warning" tag={Link} to={'/event/' + eventData._id + '/update'}>Update</Button>
+                        <ButtonBar visible={role === 'organiser'}>
+                            <Button outline block color="warning" tag={Link} to={'/event/' + eventData._id + '/update'}>Update</Button>
+                        </ButtonBar>
                     </Col>
                 </Row>
             </div>

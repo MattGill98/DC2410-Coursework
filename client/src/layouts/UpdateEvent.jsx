@@ -21,7 +21,7 @@ const mapStateToProps = state => {
     };
 };
 
-const EventData = ({ updateEvent, eventData, visible, updateError }) => {
+const EventData = ({ updateEvent, visible, updateError }) => {
     if (visible === false) {
         return null;
     }
@@ -150,7 +150,6 @@ class UpdateEvent extends React.Component {
             <div>
                 {/* Error bars */}
                 <ErrorAlert error={fetchError} id="fetchErrorAlert" />
-                <ErrorAlert error={updateError} id="updateErrorAlert" />
 
                 {/* Button bar */}
                 <ButtonBar>
