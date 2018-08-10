@@ -21,8 +21,8 @@ module.exports = function (mongoose) {
             },
             role: {
                 type: String,
-                enum: ['member', 'student', 'organiser'],
-                default: 'member'
+                enum: ['student', 'organiser'],
+                required: [true, 'A user needs a role.']
             }
         },
         {
@@ -69,7 +69,7 @@ module.exports = function (mongoose) {
             if (res) return done(null, false, { message: 'Username taken.' });
 
             user.save(err => {
-                if (err) throw err;
+                if (err) return done(err);
 
                 done(null, {
                     username: user.username,

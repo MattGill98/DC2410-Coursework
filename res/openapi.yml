@@ -4,7 +4,7 @@ info:
   version: "1.0"
   title: "DC2410 Coursework"
 servers:
-  - url: "http://192.168.150.132:3000/api"
+  - url: "https://obscure-gorge-28707.herokuapp.com/api"
     description: "A locally hosted server."
 paths:
   /events:
@@ -118,7 +118,7 @@ paths:
         403:
           $ref: "#/components/responses/Unauthorized"
         500:
-          $ref: "#/components/responses/FieldError"
+          $ref: "#/components/responses/EventError"
       security:
         - cookieAuth: []
   /event/{id}:
@@ -186,7 +186,7 @@ paths:
         403:
           $ref: "#/components/responses/Unauthorized"
         500:
-          $ref: "#/components/responses/FieldError"
+          $ref: "#/components/responses/EventError"
       security:
         - cookieAuth: []
     delete:
@@ -253,6 +253,37 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/Authenticated"
+        500:
+          $ref: "#/components/responses/UserError"
+  /register:
+    post:
+      operationId: "register"
+      summary: "Register."
+      description: "Register with the provided details. A JWT cookie is provided on a successful login."
+      requestBody:
+        description: "The user credentials."
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                  enum: ["member", "organiser"]
+              required:
+                - username
+                - password
+                - role
+      responses:
+        200:
+          $ref: "#/components/responses/Authenticated"
+        500:
+          $ref: "#/components/responses/UserError"
   /logout:
     get:
       operationId: "logout"
@@ -319,8 +350,8 @@ components:
             properties:
               message:
                 type: string
-    FieldError:
-      description: "An error occurred whilst validating the schema fields."
+    EventError:
+      description: "An error occurred whilst validating the event fields."
       content:
         application/json:
           schema:
@@ -357,6 +388,33 @@ components:
                       message:
                         type: string
                   picture:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+    UserError:
+      description: "An error occurred whilst validating the user fields."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              errors:
+                type: object
+                properties:
+                  username:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                  password:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                  role:
                     type: object
                     properties:
                       message:

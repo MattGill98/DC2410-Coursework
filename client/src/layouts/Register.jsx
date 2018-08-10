@@ -66,8 +66,7 @@ class Login extends React.Component {
                             </FormGroup>
                             <FormGroup>
                                 <Label for="role">Role</Label>
-                                <Input type="select" name="role">
-                                    <option></option>
+                                <Input type="select" name="role" defaultValue="student">
                                     <option>student</option>
                                     <option>organiser</option>
                                 </Input>

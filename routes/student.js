@@ -10,8 +10,6 @@ module.exports = function (Event) {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
             if (!user) return response.status(401).send({message: 'You need to be authenticated to perform this action.'});
 
-            if (user.role !== 'organiser' && user.role !== 'student') return response.status(403).send({ message: 'Only students and organisers can subscribe to events.' });
-
             Event.update({_id: request.params.id}, {$addToSet: {interested: user.username}}, (err, res) => {
                 if (err) return response.status(500).send({message: 'Error registering interest.'});
                 if (!res) return response.status(404).send({message: 'Event didn\'t exist.'});
@@ -25,8 +23,6 @@ module.exports = function (Event) {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
             if (!user) return response.status(401).send({message: 'You need to be authenticated to perform this action.'});
-
-            if (user.role !== 'organiser' && user.role !== 'student') return response.status(403).send({ message: 'Only students and organisers can unsubscribe from events.' });
 
             Event.update({_id: request.params.id}, {$pull: {interested: user.username}}, (err, res) => {
                 if (err) return response.status(500).send({message: 'Error deregistering interest.'});
@@ -61,8 +57,6 @@ module.exports = function (Event) {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({ message: 'Error authenticating.' });
             if (!user) return response.status(401).send({ message: 'You need to be authenticated to perform this action.' });
-
-            if (user.role !== 'organiser' && user.role !== 'student') return response.status(403).send({ message: 'Only students and organisers can filter events.' });
 
             Event.find(request.query.filter, request.query.sort, request.query.order, user.username, request.query.limit, request.query.offset, (err, results) => {
                 if (err) return response.status(500).send(err);

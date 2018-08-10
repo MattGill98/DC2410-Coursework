@@ -17,15 +17,10 @@ const Welcome = () => (
                 </ul>
             </li>
             <li>
-                Any user can:
+                A student user can:
                 <ul>
                     <li>Login.</li>
                     <li>Logout.</li>
-                </ul>
-            </li>
-            <li>
-                A student user can:
-                <ul>
                     <li>List all event information by the three categories (sport/culture/other).</li>
                     <li>List all event information according to popularity.</li>
                     <li>List all event information according to dates.</li>
@@ -36,9 +31,11 @@ const Welcome = () => (
             <li>
                 An organiser can:
                 <ul>
+                    <li>Perform all the same functionality of a student user.</li>
                     <li>Add new events.</li>
                     <li>List all of their own events.</li>
                     <li>Update their own events.</li>
+                    <li>Delete events.</li>
                 </ul>
             </li>
         </ul>
