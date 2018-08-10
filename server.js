@@ -59,30 +59,6 @@ app.use('/api', require('./routes/organiser.js')(Event));
 
 module.exports = app;
 
-// Get all users
-app.get('/api/users', (request, response) => {
-    User.readAll((err, res) => {
-        if (err) return response.status(500).send(err);
-        response.send(res);
-    });
-})
-
-// Delete all users
-app.delete('/api/users', (request, response) => {
-    User.deleteAll((err, res) => {
-        if (err) return response.status(500).send(err);
-        response.send(res);
-    });
-})
-
-// Delete all events
-app.delete("/api/events", (request, response) => {
-    Event.deleteAll((err, res) => {
-        if (err) return response.status(500).send({message: 'Error deleting events.'});
-        response.send(res);
-    });
-});
-
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build/index.html'));
 });
