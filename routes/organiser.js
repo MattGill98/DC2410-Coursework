@@ -4,6 +4,7 @@ const passport = require('passport');
 
 module.exports = function (Event) {
 
+    // Create a new event
     router.post('/events', (request, response, next) => {
         for (var key in request.body) {
             if (key !== 'picture') {
@@ -25,6 +26,7 @@ module.exports = function (Event) {
         })(request, response, next);
     });
 
+    // Delete an event
     router.delete('/event/:id', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
@@ -40,6 +42,7 @@ module.exports = function (Event) {
         })(request, response, next);
     });
 
+    // Update an event
     router.patch('/event/:id', (request, response, next) => {
         for (var key in request.body) {
             if (key !== 'picture') {

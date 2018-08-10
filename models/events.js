@@ -66,11 +66,6 @@ module.exports = function (mongoose) {
         });
     }
 
-    function deleteAllPictures(callback) {
-        const gfs = grid(mongoose.connection.db);
-        gfs.files.remove({}, callback);
-    }
-
     const eventSchema = new mongoose.Schema(
         {
             name: {
@@ -255,15 +250,6 @@ module.exports = function (mongoose) {
             Event.remove({ _id: id }, (err, res) => {
                 if (err) return callback(err);
                 deletePicture(id, (err, store) => {
-                    if (err) return callback(err);
-                    callback(null, res);
-                });
-            });
-        },
-        deleteAll: function (callback) {
-            Event.remove({}, (err, res) => {
-                if (err) return callback(err);
-                deleteAllPictures((err, store) => {
                     if (err) return callback(err);
                     callback(null, res);
                 });

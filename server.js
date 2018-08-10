@@ -59,6 +59,7 @@ app.use('/api', require('./routes/organiser.js')(Event));
 
 module.exports = app;
 
+// Redirect unknown requests to the frontend.
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build/index.html'));
 });

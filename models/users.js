@@ -107,13 +107,4 @@ module.exports = function (mongoose) {
             });
         });
     });
-
-    return {
-        deleteAll: function (callback) {
-            User.remove({}, callback);
-        },
-        readAll: function(callback) {
-            User.find({}, [], {}, callback);
-        }
-    };
 };

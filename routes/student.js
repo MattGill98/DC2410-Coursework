@@ -4,6 +4,7 @@ const passport = require('passport');
 
 module.exports = function (Event) {
 
+    // Register interest for an event
     router.put('/event/:id/interest', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
@@ -19,6 +20,7 @@ module.exports = function (Event) {
         })(request, response, next);
     });
 
+    // Remove interest for an event
     router.delete('/event/:id/interest', (request, response, next) => {
         passport.authenticate('verify', { session: false }, (err, user, info) => {
             if (err) return response.status(500).send({message: 'Error authenticating.'});
@@ -34,6 +36,7 @@ module.exports = function (Event) {
         })(request, response, next);
     });
 
+    // Get a list of events with filters and sort variables applied
     router.get('/events', (request, response, next) => {
         request.query.filter = request.sanitize(request.query.filter);
         request.query.sort = request.sanitize(request.query.sort);
