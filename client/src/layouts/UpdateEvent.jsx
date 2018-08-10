@@ -156,7 +156,7 @@ class UpdateEvent extends React.Component {
                     <Button outline color="secondary" tag={Link} to={'/event/' + eventData._id}>Return</Button>
                 </ButtonBar>
 
-                <GridLoader color={'#95A09E'} loaderStyle={{'margin': 'auto'}} loading={fetching} />
+                <GridLoader color={'#95A09E'} loaderStyle={{'margin': 'auto'}} loading={updating} />
 
                 <EventData eventData={eventData} visible={!fetching && !updating} updateError={updateError} updateEvent={this.startUpdate} />
             </div>
